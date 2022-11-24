@@ -11,7 +11,8 @@ class CarritoDB:
                       "id_carrito"	INTEGER NOT NULL,
                       "lista_productos"	VARCHAR(50) NOT NULL,
                       "total_a_pagar" REAL NOT NULL,
-                      "modo_de_pago" VARCHAR(50) NOT NULL,
+                      "modo_de_pago" VARCHAR(1) NOT NULL,
+                      "fecha" DATE NOT NULL,
                       "id_usuario" INTEGER NOT NULL,
                        PRIMARY KEY("id_carrito" AUTOINCREMENT)
                        FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario) ON DELETE CASCADE 
