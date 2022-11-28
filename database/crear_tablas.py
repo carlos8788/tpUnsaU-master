@@ -86,6 +86,22 @@ class CrearDB:
         cursor.execute(query)
         conexion.commit()
         conexion.close()
+    
+    def sql_search(self, column, value):
+        conexion = self._conectar_db()
+        sql = f"SELECT * FROM {self.__nombre_tabla} WHERE {column} LIKE '{value}';"
+        cursor = conexion.cursor()
+        cursor.execute(sql)
+        datos = cursor.fetchone()
+        conexion.commit()
+        conexion.close()
+
+        if datos == None:
+            return False
+        
+        return datos[2]
+
+
 
 
 
@@ -93,15 +109,18 @@ if __name__ == "__main__":
     
     columnas = """(
                 "id"	INTEGER NOT NULL,
-                "nombre"	VARCHAR(50) NOT NULL,
-                "apellido"	VARCHAR(50) NOT NULL,
-                "edad"	INTEGER NOT NULL,
+                "usuario"	VARCHAR(50) NOT NULL UNIQUE,
+                "contrasenia"	VARCHAR(50) NOT NULL,
+                "correo"	VARCHAR(50),
+                "direccion"	VARCHAR(100),
+                "is_admin" 	INTEGER(1) NOT NULL,
                 PRIMARY KEY("id" AUTOINCREMENT)
               )"""
     
-    tabla_persona = CrearDB('persona', columnas)
-    # tabla_persona.crear_tabla(param)
-    # tabla_persona.insert_sql('nombre, apellido, edad', '"Luis", "Pérez", 34')
+    tabla_persona = CrearDB('usuario', columnas)
+    # tabla_persona.crear_tabla()
+    tabla_persona.insert_sql('usuario, contrasenia, correo, direccion, is_admin', '"luis3", "perez", "luis@carlos.com", "av siempre viva", 1')
+    # print(tabla_persona.sql_search('usuario', 'luis3'))
     # print(tabla_persona.get_sql())
     # tabla_persona.delete_sql('id',2)
     # tabla_persona.update_sql(id=3, nombre='Lucas')

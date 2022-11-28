@@ -1,6 +1,6 @@
 from pathlib import Path
-
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Frame, ttk, Label, Scrollbar, IntVar, messagebox
+# import __init__
+from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Frame, ttk, Label, Scrollbar, IntVar, messagebox, Toplevel
 # from database import producto_db
 # from clases.producto import get_products, record
 # from clases.carrito import Carrito
@@ -11,7 +11,7 @@ class VistaUsuario:
         
         OUTPUT_PATH = Path(__file__).parent
         ASSETS_PATH = OUTPUT_PATH / \
-            Path(r"assets\frame0")
+            Path(r"assets_usuario\frame0")
 
 
         def relative_to_assets(path: str) -> Path:
@@ -109,15 +109,16 @@ class VistaUsuario:
             borderwidth=0,
             highlightthickness=0,
             # command=lambda: insertar_en_carrito(self.tabla_carrito, self.entrada.get(), self.insertar_producto),####################################
-            command=lambda: self.carrito.insertar_en_carrito(
-                self.tabla_carrito, self.entrada.get(),
-                self.insertar_producto,
-                self.descripcion,
-                self.precio,
-                self.stock,
-                self.product,
-                self.entrada
-                ),
+            command=lambda: print("Hola"),
+            # command=lambda: self.carrito.insertar_en_carrito(
+            #     self.tabla_carrito, self.entrada.get(),
+            #     self.insertar_producto,
+            #     self.descripcion,
+            #     self.precio,
+            #     self.stock,
+            #     self.product,
+            #     self.entrada
+            #     ),
             relief="flat"
         )
         self.button_5.place(
@@ -402,7 +403,7 @@ class VistaUsuario:
             14.0,
             450.0,
             anchor="nw",
-            text="tabla_Carrito:",
+            text="Carrito:",
             fill="#000000",
             font=("Inter", 16 * -1)
         )

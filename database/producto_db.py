@@ -45,7 +45,7 @@ if __name__ == "__main__":
 
     nuevo_producto = ProductoDB()
     # nuevo_producto.crear_producto('Gaseosa', '15', '150', 'Talca Cola 3L')
-    nuevo_producto.modificar_producto(IDProducto=1, nombre='LEche', stock=15, precio=150, descripcion='Leche NIDO en tarro 500gr')
+    # nuevo_producto.modificar_producto(IDProducto=1, nombre='LEche', stock=15, precio=150, descripcion='Leche NIDO en tarro 500gr')
     # nuevo_producto.borrar_producto(2)
     # nuevo_producto.mostrar_productos()
     print("***"*10)
