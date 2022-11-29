@@ -95,11 +95,12 @@ class CrearDB:
         datos = cursor.fetchone()
         conexion.commit()
         conexion.close()
-
+        # print(datos)
         if datos == None:
             return False
         
-        return datos[2]
+        return (datos[2],datos[5])
+
 
 
 
@@ -119,7 +120,7 @@ if __name__ == "__main__":
     
     tabla_persona = CrearDB('usuario', columnas)
     # tabla_persona.crear_tabla()
-    tabla_persona.insert_sql('usuario, contrasenia, correo, direccion, is_admin', '"luis3", "perez", "luis@carlos.com", "av siempre viva", 1')
+    tabla_persona.insert_sql('usuario, contrasenia, correo, direccion, is_admin', '"carlos", "perez", "luis@carlos.com", "av siempre viva", 0')
     # print(tabla_persona.sql_search('usuario', 'luis3'))
     # print(tabla_persona.get_sql())
     # tabla_persona.delete_sql('id',2)

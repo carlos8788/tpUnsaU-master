@@ -4,12 +4,12 @@
 
 
 from pathlib import Path
-from clases.usuario import Usuario
-from views import v_usuario
+from model.usuario import Usuario
+
 
 # from tkinter import *
 # Explicit imports to satisfy Flake8
-from tkinter import Tk, Canvas, Entry, Checkbutton, Button, PhotoImage, IntVar, StringVar
+from tkinter import Tk, Canvas, Entry, Checkbutton, Button, PhotoImage, IntVar, StringVar, Frame, Label
 
 class Bienvenida:
     def __init__(self):
@@ -54,6 +54,7 @@ class Bienvenida:
             relief = "ridge"
         )
 
+        ##### ENTRY USUARIO ###########
 
         self.canvas.place(x = 0, y = 0)
         self.entry_image_1 = PhotoImage(
@@ -64,14 +65,13 @@ class Bienvenida:
             image=self.entry_image_1
         )
 
-        
-        
         self.entry_1 = Entry(
             bd=0,
             bg="#D9D9D9",
             fg="#000716",
             highlightthickness=0,
-            textvariable=self.usuario
+            textvariable=self.usuario,
+            font=("Inter", 20 * -1)
         )
 
         self.entry_1.place(
@@ -80,6 +80,8 @@ class Bienvenida:
             width=184.0,
             height=25.0
         )
+        
+        ###### ENTRY CONSTRASEÑA #####
 
         self.entry_image_7 = PhotoImage(
             file=relative_to_assets("entry_7.png"))
@@ -95,7 +97,9 @@ class Bienvenida:
             bg="#D9D9D9",
             fg="#000716",
             highlightthickness=0,
-            textvariable=self.contrasenia
+            textvariable=self.contrasenia,
+            show='*',
+            font=("Inter", 20 * -1)
         )
         self.entry_7.place(
             x=133.0,
@@ -104,13 +108,20 @@ class Bienvenida:
             height=25.0
         )
 
+        ####### BOTON REGISTRARSE #########
+
         self.button_image_1 = PhotoImage(
             file=relative_to_assets("button_1.png"))
         self.button_1 = Button(
             image=self.button_image_1,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_1 clicked"),
+            command=lambda: USUARIO.mostrar_formulario(self.frame,
+                                                    self.button_1,
+                                                    self.entry_1,
+                                                    self.entry_7,
+                                                    self.ingresar,
+                                                    self.button_4 ),
             relief="flat"
         )
         self.button_1.place(
@@ -119,23 +130,7 @@ class Bienvenida:
             width=246.0,
             height=35.0
         )
-
-        self.button_image_2 = PhotoImage(
-            file=relative_to_assets("button_2.png"))
         
-        self.button_2 = Button(
-            image=self.button_image_2,
-            borderwidth=0,
-            highlightthickness=0,
-            command=lambda: print(self.admin.get(), "imprimiendo"),
-            relief="flat"
-        )
-        self.button_2.place(
-            x=478.0,
-            y=412.0,
-            width=246.0,
-            height=35.0
-        )
 
         ################# BOTON INGRESAR ############
 
@@ -155,7 +150,7 @@ class Bienvenida:
             height=35.0
         )
 
-        
+        ######## RESTABLECER CONTRASEÑA ##################
 
         self.button_image_4 = PhotoImage(
             file=relative_to_assets("button_4.png"))
@@ -172,6 +167,8 @@ class Bienvenida:
             width=319.0,
             height=25.0
         )
+
+
         ################### NUEVO REGISTRO ############################
 
         
@@ -192,7 +189,8 @@ class Bienvenida:
             bg="#D9D9D9",
             fg="#000716",
             highlightthickness=0,
-            textvariable=self.nuevo_usuario
+            textvariable=self.nuevo_usuario,
+            font=("Inter", 20 * -1)
         )
         self.entry_2.place(
             x=580.0,
@@ -216,7 +214,8 @@ class Bienvenida:
             bg="#D9D9D9",
             fg="#000716",
             highlightthickness=0,
-            textvariable=self.correo
+            textvariable=self.correo,
+            font=("Inter", 20 * -1)
         )
         self.entry_3.place(
             x=580.0,
@@ -233,13 +232,15 @@ class Bienvenida:
             image=self.entry_image_4
         )
 
-
+        ################# CONTRASEÑA ################
         self.entry_4 = Entry(
             bd=0,
             bg="#D9D9D9",
             fg="#000716",
             highlightthickness=0,
-            textvariable=self.nueva_contrasenia
+            textvariable=self.nueva_contrasenia,
+            font=("Inter", 20 * -1),
+            show='*'
         )
         self.entry_4.place(
             x=580.0,
@@ -256,14 +257,16 @@ class Bienvenida:
             image=self.entry_image_5
         )
 
-        
+        ################# CONTRASEÑA REPEAT ################
 
         self.entry_5 = Entry(
             bd=0,
             bg="#D9D9D9",
             fg="#000716",
             highlightthickness=0,
-            textvariable=self.nueva_contrasenia_repeat
+            textvariable=self.nueva_contrasenia_repeat,
+            font=("Inter", 20 * -1),
+            show='*'
         )
         self.entry_5.place(
             x=580.0,
@@ -286,7 +289,8 @@ class Bienvenida:
             bg="#D9D9D9",
             fg="#000716",
             highlightthickness=0,
-            textvariable=self.direccion
+            textvariable=self.direccion,
+            font=("Inter", 20 * -1)
         )
         self.entry_6.place(
             x=580.0,
@@ -299,6 +303,40 @@ class Bienvenida:
         
         self.check_1.place(x=600.0, y=340.7)
 
+        ######### BOTON CREAR NUEVO USUARIO ###################
+        
+
+        self.button_image_2 = PhotoImage(
+            file=relative_to_assets("button_2.png"))
+        
+        self.button_2 = Button(
+            image=self.button_image_2,
+            borderwidth=0,
+            highlightthickness=0,
+            command=lambda: USUARIO.crear_usuario(
+                                    Usuario(
+                                        self.nuevo_usuario.get(),
+                                        self.nueva_contrasenia.get(),
+                                        self.correo.get(),
+                                        self.direccion.get(),
+                                        self.admin.get()
+                                        ),
+                                        self.nueva_contrasenia_repeat.get(),
+                                        self.admin,
+                                        self.nuevo_usuario,
+                                        self.nueva_contrasenia,
+                                        self.nueva_contrasenia_repeat,
+                                        self.correo,
+                                        self.direccion
+                                        ),
+            relief="flat"
+        )
+        self.button_2.place(
+            x=478.0,
+            y=412.0,
+            width=246.0,
+            height=35.0
+        )
 
         self.canvas.create_text(
             55.0,
@@ -385,14 +423,22 @@ class Bienvenida:
             font=("Inter", 20 * -1)
         )
 
-
+        self.frame_image = PhotoImage(
+            file=relative_to_assets("supermarket.png"))
+        self.frame = Frame(self.window, bg="#FFFFFF", width=400, height=500)
+        self.frame.place(x=370, y=10)
+        self.label = Label(self.frame, image=self.frame_image)
+        self.label.place(x=0, y=0)
+        # self.frame.pack_forget()
         self.window.resizable(False, False)
         self.window.mainloop()
 
-    def funcion(self):
-            # self.window.destroy()
-            ventana = self.window
-            return ventana
+    # def funcion(self, frame):
+    #         print("Estoy en funcion")
+    #         frame.pack_forget()
+    #         frame.destroy()
+            # ventana = self.window
+            # return ventana
     # def abrir_vista(self, clase):
     #     clase = VistaUsuario()
     #     return clase

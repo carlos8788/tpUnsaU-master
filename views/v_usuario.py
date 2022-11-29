@@ -7,7 +7,8 @@ from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Frame, ttk, Lab
 
 
 class VistaUsuario:
-    def __init__(self):
+    def __init__(self, nombre_usuario):
+        self.__nombre_usuario = nombre_usuario
         
         OUTPUT_PATH = Path(__file__).parent
         ASSETS_PATH = OUTPUT_PATH / \
@@ -421,7 +422,7 @@ class VistaUsuario:
             407.0,
             2.0,
             anchor="nw",
-            text="BIENVENIDO USUARIO",
+            text=f"BIENVENIDO {self.__nombre_usuario}",
             fill="#000000",
             font=("Inter", 16 * -1)
         )
