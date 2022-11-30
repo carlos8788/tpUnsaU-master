@@ -58,7 +58,7 @@ class Usuario:
             self.valor = self.table.sql_search('usuario', usuario.get())
 
             if self.valor[1] == 1:
-                
+                print("Se espera la vista admin")
                 return True
             if self.valor[0] == contrasenia.get():
                 

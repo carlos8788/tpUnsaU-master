@@ -5,6 +5,7 @@
 
 from pathlib import Path
 from model.usuario import Usuario
+from .v_reset_pass import ResetPass
 
 
 # from tkinter import *
@@ -158,7 +159,7 @@ class Bienvenida:
             image=self.button_image_4,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_4 clicked"),
+            command=lambda: ResetPass(),
             relief="flat"
         )
         self.button_4.place(

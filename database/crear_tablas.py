@@ -95,7 +95,7 @@ class CrearDB:
         datos = cursor.fetchone()
         conexion.commit()
         conexion.close()
-        # print(datos)
+        print(datos)
         if datos == None:
             return False
         
