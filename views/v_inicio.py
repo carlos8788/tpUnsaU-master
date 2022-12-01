@@ -159,7 +159,7 @@ class Bienvenida:
             image=self.button_image_4,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: ResetPass(),
+            command=lambda: ResetPass(self.window),
             relief="flat"
         )
         self.button_4.place(

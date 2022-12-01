@@ -7,11 +7,11 @@ from pathlib import Path
 
 # from tkinter import *
 # Explicit imports to satisfy Flake8
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage,Toplevel
+from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 
 class ResetPass:
-    def __init__(self):
-        
+    def __init__(self, window):
+        window.destroy()
         OUTPUT_PATH = Path(__file__).parent
         ASSETS_PATH = OUTPUT_PATH / Path(r"assets_reset\frame0")
 
@@ -20,7 +20,7 @@ class ResetPass:
             return ASSETS_PATH / Path(path)
 
 
-        self.window_2 = Toplevel()
+        self.window_2 = Tk()
 
         self.window_2.geometry("552x353")
         self.window_2.configure(bg = "#FFFFFF")
