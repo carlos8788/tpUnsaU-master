@@ -10,16 +10,19 @@ from .v_reset_pass import ResetPass
 
 # from tkinter import *
 # Explicit imports to satisfy Flake8
-from tkinter import Tk, Canvas, Entry, Checkbutton, Button, PhotoImage, IntVar, StringVar, Frame, Label
+from tkinter import Tk, Canvas, Entry, Checkbutton, Button, PhotoImage, IntVar, StringVar, Frame, Label, Toplevel
 
 class Bienvenida:
+    
+
     def __init__(self):
         OUTPUT_PATH = Path(__file__).parent
         ASSETS_PATH = OUTPUT_PATH / Path(r"assets_inicio\frame0")
 
-
-        def relative_to_assets(path: str) -> Path:
+        def relative_to_assets(path: str) -> Path:    
             return ASSETS_PATH / Path(path)
+
+        
 
 
         self.window = Tk()
@@ -72,8 +75,10 @@ class Bienvenida:
             fg="#000716",
             highlightthickness=0,
             textvariable=self.usuario,
-            font=("Inter", 20 * -1)
+            font=("Inter", 20 * -1),
+            
         )
+        self.entry_1.insert(0, 'carlos8788')
 
         self.entry_1.place(
             x=133.0,
@@ -109,6 +114,8 @@ class Bienvenida:
             height=25.0
         )
 
+        self.entry_7.insert(0, '123456789')
+
         ####### BOTON REGISTRARSE #########
 
         self.button_image_1 = PhotoImage(
@@ -122,7 +129,8 @@ class Bienvenida:
                                                     self.entry_1,
                                                     self.entry_7,
                                                     self.ingresar,
-                                                    self.button_4 ),
+                                                    self.button_4,
+                                                    ),
             relief="flat"
         )
         self.button_1.place(
@@ -155,11 +163,12 @@ class Bienvenida:
 
         self.button_image_4 = PhotoImage(
             file=relative_to_assets("button_4.png"))
+
         self.button_4 = Button(
             image=self.button_image_4,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: ResetPass(self.window),
+            command=lambda: ResetPass(self.button_4),
             relief="flat"
         )
         self.button_4.place(
@@ -323,6 +332,7 @@ class Bienvenida:
                                         self.admin.get()
                                         ),
                                         self.nueva_contrasenia_repeat.get(),
+                                        self.window,
                                         self.admin,
                                         self.nuevo_usuario,
                                         self.nueva_contrasenia,
@@ -412,7 +422,7 @@ class Bienvenida:
             anchor="nw",
             text="Nuevo registro",
             fill="#000000",
-            font=("Inter", 20 * -1)
+               font=("Inter", 20 * -1)
         )
 
         self.canvas.create_text(
@@ -433,6 +443,55 @@ class Bienvenida:
         # self.frame.pack_forget()
         self.window.resizable(False, False)
         self.window.mainloop()
+
+    def reset_pass(self, root):
+        OUTPUT_PATH = Path(__file__).parent
+        ASSETS_PATH = OUTPUT_PATH / Path(r"assets_reset\frame0")
+
+        # self.relative_to_assets("assets_reset\frame0")
+        def relative_to_assets(path: str) -> Path:
+            return ASSETS_PATH / Path(path)
+
+
+        # self.window_2 = Tk()
+        self.window_2 = Toplevel(root)
+
+        self.window_2.geometry("552x353")
+        self.window_2.configure(bg = "#FFFFFF")
+
+        self.canvas = Canvas(
+            self.window_2,
+            bg = "#FFFFFF",
+            height = 353,
+            width = 552,
+            bd = 0,
+            highlightthickness = 0,
+            relief = "ridge"
+        )
+        self.canvas.place(x = 0, y = 0)
+        
+        self.entry_1 = Entry(
+            self.window_2,
+            bd=0,
+            bg="#FFD2D2",
+            fg="#000716",
+            highlightthickness=0
+        )
+        self.entry_1.place(
+            x=217.0,
+            y=212.0,
+            width=179.0,
+            height=27.0
+        )
+        # Display until closed manually
+        self.window_2.mainloop()
+        
+    
+    
+    def relative_to_assets(path: str) -> Path:
+        OUTPUT_PATH = Path(__file__).parent
+        ASSETS_PATH = OUTPUT_PATH / Path(r"assets_inicio\frame0")
+        return ASSETS_PATH / Path(path)
 
     # def funcion(self, frame):
     #         print("Estoy en funcion")

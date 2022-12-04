@@ -2,7 +2,7 @@ import sqlite3
 
 class CrearDB:
     
-    def __init__(self, nombre_tabla, columnas):
+    def __init__(self, nombre_tabla: str, columnas: str):
         
         self.__nombre_tabla = nombre_tabla
         self.__columnas = columnas
@@ -87,7 +87,7 @@ class CrearDB:
         conexion.commit()
         conexion.close()
     
-    def sql_search(self, column, value):
+    def sql_search(self, column: str, value: str):
         conexion = self._conectar_db()
         sql = f"SELECT * FROM {self.__nombre_tabla} WHERE {column} LIKE '{value}';"
         cursor = conexion.cursor()
@@ -95,11 +95,12 @@ class CrearDB:
         datos = cursor.fetchone()
         conexion.commit()
         conexion.close()
-        print(datos)
+        # print(datos)
         if datos == None:
+            # print("No hay coincidencias")
             return False
-        
-        return (datos[2],datos[5])
+        # print("Hay coincidencias")
+        return (datos[0], datos[2], datos[5])
 
 
 

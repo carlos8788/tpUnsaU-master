@@ -1,29 +1,32 @@
 from pathlib import Path
 # import __init__
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Frame, ttk, Label, Scrollbar, IntVar, messagebox, Toplevel
+from tkinter import Tk, Canvas, Entry, Button, PhotoImage, Frame, ttk, Label, Scrollbar, IntVar, messagebox
+
 # from database import producto_db
 # from clases.producto import get_products, record
-# from clases.carrito import Carrito
+from model.carrito import Carrito
+from model.producto import Producto
 
 
 class VistaUsuario:
     def __init__(self, nombre_usuario):
         self.__nombre_usuario = nombre_usuario
-        
+
         OUTPUT_PATH = Path(__file__).parent
         ASSETS_PATH = OUTPUT_PATH / \
             Path(r"assets_usuario\frame0")
 
+        self.producto = Producto(None, None, None, None, None)
+        self.carrito = Carrito(None, None, None)
 
         def relative_to_assets(path: str) -> Path:
             return ASSETS_PATH / Path(path)
-
 
         self.window = Tk()
 
         self.window.geometry("987x751")
         self.window.configure(bg="#FFFFFF")
-        self.insertar_producto=[]
+        # self.insertar_producto = []
 
         self.canvas = Canvas(
             self.window,
@@ -100,29 +103,29 @@ class VistaUsuario:
             height=38.0
         )
 
-        
         # self.carrito = Carrito("Luis", "lista", 200)
 
         self.button_image_5 = PhotoImage(
             file=relative_to_assets("button_5.png"))
-        self.button_5 = Button(
+        self.agregar_a_carrito = Button(
             image=self.button_image_5,
             borderwidth=0,
             highlightthickness=0,
             # command=lambda: insertar_en_carrito(self.tabla_carrito, self.entrada.get(), self.insertar_producto),####################################
-            command=lambda: print("Hola"),
-            # command=lambda: self.carrito.insertar_en_carrito(
-            #     self.tabla_carrito, self.entrada.get(),
-            #     self.insertar_producto,
-            #     self.descripcion,
-            #     self.precio,
-            #     self.stock,
-            #     self.product,
-            #     self.entrada
-            #     ),
+            # command=lambda: print("Hola"),
+            command=lambda: self.carrito.insertar_en_carrito(
+                self.tabla_carrito, 
+                self.entrada.get(),
+                self.producto.capturar_datos([self.nombre]),
+                self.descripcion,
+                self.precio,
+                self.stock,
+                self.product,
+                self.entrada
+                ),
             relief="flat"
         )
-        self.button_5.place(
+        self.agregar_a_carrito.place(
             x=793.0,
             y=383.0,
             width=176.0,
@@ -136,17 +139,17 @@ class VistaUsuario:
             231.5,
             image=self.entry_image_1
         )
-        
-        self.descripcion_text=''
+
+        self.descripcion_text = ''
         self.descripcion = Label(text=self.descripcion_text,
-            font=("Inter", 16 * -1),
-            wraplength= 170, 
-            bd=0,
-            bg="#D9D9D9",
-            fg="#000716",
-            highlightthickness=0
-        )
-        
+                                 font=("Inter", 16 * -1),
+                                 wraplength=170,
+                                 bd=0,
+                                 bg="#D9D9D9",
+                                 fg="#000716",
+                                 highlightthickness=0
+                                 )
+
         self.descripcion.place(
             x=793.0,
             y=191.0,
@@ -188,7 +191,7 @@ class VistaUsuario:
             image=self.entry_image_3
         )
 
-        self.precio_text= ''
+        self.precio_text = ''
         self.precio = Label(
             text=self.precio_text,
             font=("Inter", 16 * -1),
@@ -265,7 +268,7 @@ class VistaUsuario:
         )
         self.entrada = IntVar()
         self.entrada.set('')
-        
+
         self.entry_5 = Entry(
             bd=0,
             bg="#D9D9D9",
@@ -309,12 +312,10 @@ class VistaUsuario:
             height=379.0
         )
 
-        
-
         # ----------------- TABLA ---------------------
 
-        self.tabla = ttk.Treeview(self.caja_2,                                
-                                columns=('col1', 'col2', 'col3', 'col4'))
+        self.tabla = ttk.Treeview(self.caja_2,
+                                  columns=('col1', 'col2', 'col3', 'col4', 'col5'))
 
         # self.tabla.configure("mystyle.Treeview", background='light blue')
 
@@ -325,40 +326,40 @@ class VistaUsuario:
             height=379.0
         )
         self.tabla.column('#0', width=30)
-        self.tabla.column('col1', width=100)
+        self.tabla.column('col1', width=75)
         self.tabla.column('col2', width=50)
         self.tabla.column('col3', width=50)
-        self.tabla.column('col4', width=150)
-
+        self.tabla.column('col4', width=100)
+        self.tabla.column('col5', width=75)
 
         self.tabla.heading('#0', text='ID')
         self.tabla.heading('col1', text='NOMBRE')
         self.tabla.heading('col2', text='STOCK')
         self.tabla.heading('col3', text='PRECIO')
-        self.tabla.heading('col4', text='DESCRIPCIÓN')
+        self.tabla.heading('col4', text='CATEGORIA')
+        self.tabla.heading('col5', text='DESCRIPCIÓN')
 
-        self.barra = Scrollbar(self.caja_2, orient='vertical', 
-                                command=self.tabla.yview)
+        self.barra = Scrollbar(self.caja_2, orient='vertical',
+                               command=self.tabla.yview)
 
         self.barra.place(
             x=654,
             y=0,
             bordermode='inside',
             height=379
-            
+
         )
 
         self.tabla.config(yscrollcommand=self.barra.set)
 
-        
-
+        self.producto.get_products(self.tabla)
         # record(self.tabla)
         # get_products(self.tabla)
-        
+
         self.tabla.bind("<<TreeviewSelect>>", self.on_tree_select)
 
         self.caja_3 = Frame(self.window)
-        
+
         self.caja_3.place(
             x=14.0,
             y=469.0,
@@ -366,7 +367,7 @@ class VistaUsuario:
             height=278.0
         )
         self.tabla_carrito = ttk.Treeview(self.caja_3,
-                                columns=('col1', 'col2', 'col3'))
+                                          columns=('col1', 'col2', 'col3'))
         self.tabla_carrito.place(
             x=0,
             y=0,
@@ -374,29 +375,29 @@ class VistaUsuario:
             height=278.0
         )
 
-        self.barra_2 = Scrollbar(self.caja_3, orient='vertical', 
-                                command=self.tabla.yview)
+        self.barra_2 = Scrollbar(self.caja_3, orient='vertical',
+                                 command=self.tabla.yview)
 
         self.barra_2.place(
             x=654,
             y=0,
             bordermode='inside',
             height=278
-            
+
         )
 
         self.tabla_carrito.config(yscrollcommand=self.barra_2.set)
-        
+
         self.tabla_carrito.column('#0', width=50)
         self.tabla_carrito.column('col1', width=100)
         self.tabla_carrito.column('col2', width=100)
         self.tabla_carrito.column('col3', width=100)
-        
+
         self.tabla_carrito.heading('#0', text='CANTIDAD')
         self.tabla_carrito.heading('col1', text='NOMBRE')
         self.tabla_carrito.heading('col2', text='PRECIO')
         self.tabla_carrito.heading('col3', text='SUBTOTAL')
-        
+
         # self.tabla_carrito.insert('', 0, text=self.entrada.get(), values=(
         #     "args[1]", "args[2]", "args[3]"))
 
@@ -427,36 +428,55 @@ class VistaUsuario:
             font=("Inter", 16 * -1)
         )
 
-        
+        ################### COMBOBOX ####################
+        self.canvas.create_text(
+            620,
+            2.0,
+            anchor="nw",
+            text="CATEGORIAS:",
+            fill="#000000",
+            font=("Inter", 16 * -1)
+        )
+        self.lista = self.producto.mostrar_categorias()
+
+        self.combo = ttk.Combobox(
+            self.window,
+            values=self.lista,
+        )
+        self.combo.set('TODAS')
+
+        self.combo.bind("<<ComboboxSelected>>",
+                        self.selection_changed)
+        self.combo.place(x=728, y=2)
 
         self.window.resizable(False, False)
         self.window.mainloop()
 
+    def selection_changed(self, evento):
+        selection = self.combo.get()
+        self.producto.cargar_categoria(selection, self.tabla)
+        
 
     def on_tree_select(self, tabla):
-        
+
         self.current_item = self.tabla.focus()
         if not self.current_item:
             return
         data = self.tabla.item(self.current_item)
-        
+        print(data)
         data = data["values"]
-        
-        self.descripcion.config(text=data[3])
+
+        self.descripcion.config(text=data[4])
         self.precio.config(text=data[2])
         self.stock.config(text=data[1])
         self.product.config(text=data[0])
         self.insertar_producto = []
-        self.capturar_datos(data)
+        self.producto.capturar_datos(data)
+
     
-    def capturar_datos(self, data):
-        # self.insertar_producto.append(self.entrada.get())
-        self.insertar_producto.append(data[0])
-        self.insertar_producto.append(data[2])
-        self.insertar_producto.append(data[3])
 
     def capturar_entrada(self):
-        try: 
+        try:
             return self.entrada.get()
         except:
             return messagebox.showerror("Error de datos", "Por favor compruebe el dato ingresado")

@@ -10,6 +10,7 @@ class Controller:
 
 if __name__ == "__main__":
     controlador = Controller()
+    
     # usuario = Usuario('luis', 'perez', 'cualcuiera', 'perez', 1)
     # print(usuario.get_usuario(), usuario.get_contrasenia())
     # comprobar = usuario.comprobar_usuario(usuario.get_usuario(), usuario.get_contrasenia())

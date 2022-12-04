@@ -1,7 +1,8 @@
 from sqlite3 import IntegrityError
 from database.crear_tablas import CrearDB
 from tkinter import messagebox
-from views import v_usuario
+from views import v_usuario, v_admin
+
 
 class Usuario:
     def __init__(self, usuario, contrasenia, correo, direccion, is_admin):
@@ -53,14 +54,33 @@ class Usuario:
         self.__is_admin = new_condicion
         return self.__is_admin
 
+    def _borrar_entradas(self, *args):
+        for x in args:
+            x.set('')
+    
+    def _deshabilitar_boton(self, *args):
+        for x in args:
+            try:
+                x.config(state='disabled')
+            except:
+                pass
+    
+    def _habilitar_boton(self, *args):
+        for x in args:
+            try:
+                x.config(state='normal')
+            except:
+                pass
+    
     def comprobar_usuario(self, window, usuario, contrasenia):
         try:
+            
             self.valor = self.table.sql_search('usuario', usuario.get())
 
-            if self.valor[1] == 1:
+            if self.valor[2] == 1:
                 print("Se espera la vista admin")
                 return True
-            if self.valor[0] == contrasenia.get():
+            if self.valor[1] == contrasenia.get():
                 
                 window.destroy()
                 ventana=v_usuario.VistaUsuario(usuario.get())
@@ -70,10 +90,17 @@ class Usuario:
         except:
             return messagebox.showwarning("No ingresó datos", "Por favor ingrese Usuario y contraseña para continuar")
     
-    def crear_usuario(self, crear_user, contrasenia_repeat, boolean, *args):
+    def crear_usuario(self, crear_user, contrasenia_repeat, window, boolean, *args):
         
         condicion = crear_user.get_contrasenia().find('') == 0 and crear_user.get_usuario().find('') == 0
         condicion_2 = crear_user.get_contrasenia().find(' ') == -1 and crear_user.get_usuario().find(' ') == -1
+        condicion_3 = len(crear_user.get_usuario()) > 5 and len(crear_user.get_usuario())<12
+        condicion_4 = len(crear_user.get_contrasenia()) > 8 and len(crear_user.get_contrasenia())<20
+        
+        if not condicion_3:
+            return messagebox.showwarning("Usuario", "El usuario debe tener mas de 5 caracteres y menos de 12")
+        if not condicion_4:
+            return messagebox.showwarning("Contraseña", "La contraseña debe tener mas de 8 caracteres y menos de 20")
         if condicion and condicion_2:
             if crear_user.get_contrasenia() == contrasenia_repeat:
                 try:
@@ -86,26 +113,48 @@ class Usuario:
                             {crear_user.get_is_admin()}")
                     self._borrar_entradas(*args)
                     boolean.set(0)
-                    return messagebox.showinfo("Usuario Creado", "Se ha creado con éxito el usuario")
+                    messagebox.showinfo("Usuario Creado", "Se ha creado con éxito el usuario")
+                    window.destroy()
+                    if 1 != crear_user.get_is_admin():
+                        return v_usuario.VistaUsuario(crear_user.get_usuario())
+                    else:
+                        return v_admin.Administrador()
                 except IntegrityError:
                     return messagebox.showerror("Error","El usuario ya existe intente con otro")
             return messagebox.showwarning("Contraseña incorrecta", "Por favor verifique si las contraseñas son iguales")
         else:
-            return messagebox.showwarning("Sin espacios", "Por favor no deje espacios entre el nombre de usuario o contraseña")
+            return messagebox.showwarning("Sin espacios ni vacios", "Por favor no deje espacios y complete los campos de usuario y contraseña")
 
     def mostrar_formulario(self, frame, *args):
             frame.pack_forget()
             frame.destroy()
-            self._deshabilitar_boton(args[0], args[1], args[2], args[3], args[4])
+            self._deshabilitar_boton(*args)
+    
+    def reset_pass(self, usuario: str, psw_1: str, psw_2:str, window: object, *args):
+        
+        if not len(psw_1.get()) > 8 and len(psw_1.get())<20:
+            return messagebox.showwarning("Contraseña", "La contraseña debe tener mas de 8 caracteres y menos de 20")
 
-    def _borrar_entradas(self, *args):
-        for x in args:
-            x.set('')
+        existe_usuario = self.table.sql_search("usuario", usuario.get())
+
+        if existe_usuario == False:
+            print("No existe el usuario")
+            return messagebox.showwarning("Usuario", "No existe el usuario")
+        if psw_1.get() != psw_2.get():
+            return messagebox.showerror("Contraseñas", "No coinciden las contraseñas")
+        if len(psw_1.get()) == 0:
+            return messagebox.showerror("Contraseña vacía","No puede ser una contraseña vacía")
+        self.table.update_sql(id=existe_usuario[0], contrasenia=psw_1.get())
+        messagebox.showinfo("Contraseña", "Contraseña actualizada correctamente")
+        self._habilitar_boton(*args)
+        window.destroy()
     
-    def _deshabilitar_boton(self, *args):
-        for x in args:
-            x.config(state='disabled')
-    
+    def close_win(self, window, boton):
+        self._habilitar_boton(boton)
+        window.destroy()
+
+
+
 if __name__ == "__main__":
     usuario = Usuario('luis', 'perez', 'cualcuiera', 'contrasenia', 1)
     comprobar = usuario.comprobar_usuario(usuario.get_usuario(), usuario.get_contrasenia())

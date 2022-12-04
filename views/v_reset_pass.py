@@ -4,27 +4,32 @@
 
 
 from pathlib import Path
-
+from model.usuario import Usuario
 # from tkinter import *
 # Explicit imports to satisfy Flake8
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
+from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Toplevel, StringVar
+
 
 class ResetPass:
-    def __init__(self, window):
-        window.destroy()
+    def __init__(self, boton):
+        boton.config(state=("disabled"))
         OUTPUT_PATH = Path(__file__).parent
         ASSETS_PATH = OUTPUT_PATH / Path(r"assets_reset\frame0")
-
+        self.usuario = Usuario(None, None, None, None, None)
+        self.user = StringVar()
+        self.pws_1 = StringVar()
+        self.pws_2 = StringVar()
 
         def relative_to_assets(path: str) -> Path:
             return ASSETS_PATH / Path(path)
 
 
-        self.window_2 = Tk()
+        self.window_2 = Toplevel()
 
-        self.window_2.geometry("552x353")
+        self.window_2.geometry("552x353+150+400")
         self.window_2.configure(bg = "#FFFFFF")
-
+        self.window_2.overrideredirect(True)
+        self.window_2.wm_attributes("-topmost", True)
 
         self.canvas = Canvas(
             self.window_2,
@@ -37,65 +42,81 @@ class ResetPass:
         )
 
         self.canvas.place(x = 0, y = 0)
-        self.entry_image_1 = PhotoImage(
-            file=relative_to_assets("entry_1.png"))
-        self.entry_bg_1 = self.canvas.create_image(
+
+        self.entry_image_3 = PhotoImage(
+            file=relative_to_assets("entry_usuario.png"))
+        self.entry_bg_3 = self.canvas.create_image(
             306.5,
-            226.5,
-            image=self.entry_image_1
+            98.5,
+            image=self.entry_image_3
         )
-        self.entry_1 = Entry(
+        self.entry_usuario = Entry(
+            self.window_2,
             bd=0,
             bg="#FFD2D2",
             fg="#000716",
-            highlightthickness=0
+            highlightthickness=0,
+            textvariable=self.user,
+            font=("Inter", 16 * -1)
         )
-        self.entry_1.place(
+        self.entry_usuario.place(
             x=217.0,
-            y=212.0,
+            y=84.0,
             width=179.0,
             height=27.0
         )
 
         self.entry_image_2 = PhotoImage(
-            file=relative_to_assets("entry_2.png"))
+            file=relative_to_assets("entry_psw_1.png"))
         self.entry_bg_2 = self.canvas.create_image(
             306.5,
             162.5,
             image=self.entry_image_2
         )
-        self.entry_2 = Entry(
+        self.entry_psw_1 = Entry(
+            self.window_2,
             bd=0,
             bg="#FFD2D2",
             fg="#000716",
-            highlightthickness=0
+            highlightthickness=0,
+            textvariable=self.pws_1,
+            show="*",
+            font=("Inter", 16 * -1)
         )
-        self.entry_2.place(
+        self.entry_psw_1.place(
             x=217.0,
             y=148.0,
             width=179.0,
             height=27.0
         )
 
-        self.entry_image_3 = PhotoImage(
-            file=relative_to_assets("entry_3.png"))
-        self.entry_bg_3 = self.canvas.create_image(
+        self.entry_image_1 = PhotoImage(
+            file=relative_to_assets("entry_psw_2.png"))
+        self.entry_bg_1 = self.canvas.create_image(
             306.5,
-            98.5,
-            image=self.entry_image_3
+            226.5,
+            image=self.entry_image_1
         )
-        self.entry_3 = Entry(
+        self.entry_psw_2 = Entry(
+            self.window_2,
             bd=0,
             bg="#FFD2D2",
             fg="#000716",
-            highlightthickness=0
+            highlightthickness=0,
+            textvariable=self.pws_2,
+            show="*",
+            font=("Inter", 16 * -1)
         )
-        self.entry_3.place(
+        self.entry_psw_2.place(
             x=217.0,
-            y=84.0,
+            y=212.0,
             width=179.0,
             height=27.0
         )
+
+        
+
+        
 
         self.canvas.create_text(
             58.0,
@@ -136,20 +157,46 @@ class ResetPass:
         self.button_image_1 = PhotoImage(
             file=relative_to_assets("button_1.png"))
         self.button_1 = Button(
+            self.window_2,
             image=self.button_image_1,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_1 clicked"),
+            command=lambda: self.usuario.reset_pass(self.user, self.pws_1, self.pws_2, self.window_2, boton),
             relief="flat"
         )
         self.button_1.place(
-            x=217.0,
+            x=88.0,
             y=279.0,
             width=176.0,
             height=38.0
         )
-        self.window_2.resizable(False, False)
+
+
+        """###########################################   BOTON    #######################################################"""
+        self.button_image_2 = PhotoImage(
+            file=relative_to_assets("button_2.png"))
+        self.button_2 = Button(
+            self.window_2,
+            image=self.button_image_2,
+            borderwidth=0,
+            highlightthickness=0,
+            command=lambda: self.usuario.close_win(self.window_2, boton),
+            relief="flat"
+        )
+        self.button_2.place(
+            x=288.0,
+            y=279.0,
+            width=176.0,
+            height=38.0
+        )
+        self.window_2.resizable(True, True)
         self.window_2.mainloop()
+        
+        
+
+    # def restaurar(self, window):
+    #     self.window_2.destroy()
+    #     window.mainloop()
 
 if __name__ == "__main__":
     vista = ResetPass()
