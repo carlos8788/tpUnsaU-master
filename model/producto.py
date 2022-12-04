@@ -107,12 +107,7 @@ class Producto:
             if row[4] == categ_recibida:
                 self._carga_tree(treeview, row)
     
-    def capturar_datos(self, data: list):
-        insertar_producto = []
-        # insertar_producto.append(self.entrada.get())
-        insertar_producto.append(data[0])
-        insertar_producto.append(data[2])
-        insertar_producto.append(data[3])
+    
         
 
 

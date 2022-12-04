@@ -1,6 +1,6 @@
 from pathlib import Path
 # import __init__
-from tkinter import Tk, Canvas, Entry, Button, PhotoImage, Frame, ttk, Label, Scrollbar, IntVar, messagebox
+from tkinter import Tk, Canvas, Entry, Button, PhotoImage, Frame, ttk, Label, Scrollbar, IntVar, messagebox, StringVar
 
 # from database import producto_db
 # from clases.producto import get_products, record
@@ -18,7 +18,7 @@ class VistaUsuario:
 
         self.producto = Producto(None, None, None, None, None)
         self.carrito = Carrito(None, None, None)
-
+        self.lista = []
         def relative_to_assets(path: str) -> Path:
             return ASSETS_PATH / Path(path)
 
@@ -112,17 +112,17 @@ class VistaUsuario:
             borderwidth=0,
             highlightthickness=0,
             # command=lambda: insertar_en_carrito(self.tabla_carrito, self.entrada.get(), self.insertar_producto),####################################
-            # command=lambda: print("Hola"),
-            command=lambda: self.carrito.insertar_en_carrito(
-                self.tabla_carrito, 
-                self.entrada.get(),
-                self.producto.capturar_datos([self.nombre]),
-                self.descripcion,
-                self.precio,
-                self.stock,
-                self.product,
-                self.entrada
-                ),
+            command=lambda: print(self.stock_var.get()),
+            # command=lambda: self.carrito.insertar_en_carrito(
+            #     self.tabla_carrito, 
+            #     self.entrada.get(),
+            #     [self.producto_text.get(), self.precio_text.get(), "suma"],
+            #     self.descripcion,
+            #     self.precio,
+            #     self.stock,
+            #     self.product,
+            #     self.entrada
+            #     ),
             relief="flat"
         )
         self.agregar_a_carrito.place(
@@ -140,14 +140,16 @@ class VistaUsuario:
             image=self.entry_image_1
         )
 
-        self.descripcion_text = ''
-        self.descripcion = Label(text=self.descripcion_text,
+        self.descripcion_text= StringVar()
+        # self.descripcion_text.set(' ')
+        self.descripcion = Label(text=self.descripcion_text.set(''),
                                  font=("Inter", 16 * -1),
                                  wraplength=170,
                                  bd=0,
                                  bg="#D9D9D9",
                                  fg="#000716",
-                                 highlightthickness=0
+                                 highlightthickness=0,
+                                #  textvariable=self.descripcion_text
                                  )
 
         self.descripcion.place(
@@ -166,14 +168,16 @@ class VistaUsuario:
         )
 
         self.stock_text = ''
-
+        self.stock_var = StringVar()
+        # self.stock_var
         self.stock = Label(
             text=self.stock_text,
             font=("Inter", 16 * -1),
             bd=0,
             bg="#D9D9D9",
             fg="#000716",
-            highlightthickness=0
+            highlightthickness=0,
+            # textvariable=self.stock_var
         )
 
         self.stock.place(
@@ -191,9 +195,9 @@ class VistaUsuario:
             image=self.entry_image_3
         )
 
-        self.precio_text = ''
+        self.precio_text = StringVar()
         self.precio = Label(
-            text=self.precio_text,
+            text=self.precio_text.set(''),
             font=("Inter", 16 * -1),
             bd=0,
             bg="#D9D9D9",
@@ -215,10 +219,10 @@ class VistaUsuario:
             image=self.entry_image_4
         )
 
-        self.producto_text = ''
+        self.producto_text = StringVar()
 
         self.product = Label(
-            text=self.producto_text,
+            text=self.producto_text.set(''),
             font=("Inter", 16 * -1),
             bd=0,
             bg="#D9D9D9",
@@ -456,22 +460,24 @@ class VistaUsuario:
         selection = self.combo.get()
         self.producto.cargar_categoria(selection, self.tabla)
         
-
+        
     def on_tree_select(self, tabla):
-
+        self.lista.clear()
         self.current_item = self.tabla.focus()
         if not self.current_item:
             return
         data = self.tabla.item(self.current_item)
-        print(data)
+        # print(data)
         data = data["values"]
 
         self.descripcion.config(text=data[4])
         self.precio.config(text=data[2])
         self.stock.config(text=data[1])
         self.product.config(text=data[0])
-        self.insertar_producto = []
-        self.producto.capturar_datos(data)
+        self.lista.append(data[0])
+        self.lista.append(data[2])
+        print(self.lista)
+
 
     
 
