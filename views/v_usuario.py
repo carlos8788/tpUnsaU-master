@@ -17,7 +17,7 @@ class VistaUsuario:
             Path(r"assets_usuario\frame0")
 
         self.producto = Producto(None, None, None, None, None)
-        self.carrito = Carrito(None, None, None)
+        self.carrito = Carrito(None, None)
         self.lista = []
         def relative_to_assets(path: str) -> Path:
             return ASSETS_PATH / Path(path)
@@ -45,7 +45,8 @@ class VistaUsuario:
             image=self.button_image_1,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_1 clicked"),
+            # command=lambda: self.carrito.comprar(),
+            command=lambda: print("boton comprar"),
             relief="flat"
         )
         self.button_1.place(
@@ -77,7 +78,7 @@ class VistaUsuario:
             image=self.button_image_3,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_3 clicked"),
+            command=lambda: self.carrito.borrar_item(self.tabla_carrito),
             relief="flat"
         )
         self.button_3.place(
@@ -112,17 +113,17 @@ class VistaUsuario:
             borderwidth=0,
             highlightthickness=0,
             # command=lambda: insertar_en_carrito(self.tabla_carrito, self.entrada.get(), self.insertar_producto),####################################
-            command=lambda: print(self.stock_var.get()),
-            # command=lambda: self.carrito.insertar_en_carrito(
-            #     self.tabla_carrito, 
-            #     self.entrada.get(),
-            #     [self.producto_text.get(), self.precio_text.get(), "suma"],
-            #     self.descripcion,
-            #     self.precio,
-            #     self.stock,
-            #     self.product,
-            #     self.entrada
-            #     ),
+            # command=lambda: print(self.lista),
+            command=lambda: self.carrito.insertar_en_carrito(
+                self.tabla_carrito, 
+                self.lista,
+                self.entrada,
+                self.descripcion,
+                self.precio,
+                self.stock,
+                self.product,
+                self.entrada
+                ),
             relief="flat"
         )
         self.agregar_a_carrito.place(
@@ -345,7 +346,7 @@ class VistaUsuario:
 
         self.barra = Scrollbar(self.caja_2, orient='vertical',
                                command=self.tabla.yview)
-
+        
         self.barra.place(
             x=654,
             y=0,
@@ -361,6 +362,7 @@ class VistaUsuario:
         # get_products(self.tabla)
 
         self.tabla.bind("<<TreeviewSelect>>", self.on_tree_select)
+        
 
         self.caja_3 = Frame(self.window)
 
@@ -431,6 +433,9 @@ class VistaUsuario:
             fill="#000000",
             font=("Inter", 16 * -1)
         )
+        self.tabla_carrito.bind("<<TreeviewSelect>>", self.hola)
+        
+
 
         ################### COMBOBOX ####################
         self.canvas.create_text(
@@ -476,10 +481,15 @@ class VistaUsuario:
         self.product.config(text=data[0])
         self.lista.append(data[0])
         self.lista.append(data[2])
-        print(self.lista)
+        # print(self.lista)
 
+    def hola(self, evento):
+        records = self.tabla_carrito.focus()
+        data = self.tabla_carrito.item(records)
+        print(data["text"], data["values"])
 
     
+            
 
     def capturar_entrada(self):
         try:

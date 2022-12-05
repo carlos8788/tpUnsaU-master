@@ -1,28 +1,30 @@
 from tkinter import messagebox
+from _tkinter import TclError
+
 
 class Carrito:
 
-    def __init__(self, comprador, lista_productos, total):
+    def __init__(self, comprador, total):
         self.__comprador = comprador
-        self.__lista_productos = lista_productos
+        self.__lista_productos = []
         self.__total = total
-        
 
-    def insertar_en_carrito(self, tabla, cantidad, lista, *args):
+
+    def insertar_en_carrito(self, tabla, lista_productos: list, cantidad, *args):
         try:
-            lista.insert(0, cantidad)
-            print(lista)
-            print(lista[1].get(), lista[2].get(), lista[3])
-            if len(lista) != 4:
-                lista.clear()
-                self._borrar_entradas(args[0], args[1], args[2], args[3], args[4])
-            else:
-                tabla.insert('', 0, text=lista[0], values=(
-                        lista[1].get(), lista[2].get(), lista[3]))
-                lista.clear()
-                self._borrar_entradas(args[0], args[1], args[2], args[3], args[4])
-        except:
-            pass
+            if not len(lista_productos) == 4:
+                lista_productos.insert(0, cantidad.get())
+                subtotal = self._subtotal(float(lista_productos[2]), int(cantidad.get()))
+                lista_productos.append(subtotal)
+                self._carrito(lista_productos)
+                # self.__lista_productos.append(lista_productos)
+                tabla.insert('', 0, text=lista_productos[0], values=(
+                            lista_productos[1], lista_productos[2], lista_productos[3]))
+                
+                self._borrar_entradas(*args)
+                lista_productos.clear()
+        except TclError:
+            messagebox.showwarning("Datos", "No hay nada que ingresar")
 
     def _borrar_entradas(self, descripcion, precio, stock, product, entrada):
         descripcion.config(text='')
@@ -31,14 +33,29 @@ class Carrito:
         product.config(text='')
         entrada.set('')
 
-    def borrar_item(self):
-        pass
+    def _subtotal(self, precio: float, cantidad: int):
+        subtotal = precio * cantidad
+        return subtotal
 
-    def capturar_datos(self, data: list):
-        print(data)
-        self.insertar_producto = []
-        # insertar_producto.append(self.entrada.get())
-        self.insertar_producto.append(data[0])
-        self.insertar_producto.append(data[1])
-        self.insertar_producto.append(data[2])
-        # return insertar_producto
+    def _carrito(self, item: list):
+        item2 = item.copy()
+        print(id(item2))
+        print(id(item))
+
+        self.__lista_productos.append(item2)
+        print(self.__lista_productos)
+
+    
+    def comprar(self):
+        print(self.__lista_productos)
+
+
+    def borrar_item(self, tabla_carrito):
+        try:
+            records = tabla_carrito.focus()
+            data = tabla_carrito.item(records)
+            print(data["text"], data["values"])
+            tabla_carrito.delete(records)
+        except:
+            messagebox.showerror("Error", "No hay ningún item seleccionado")
+
