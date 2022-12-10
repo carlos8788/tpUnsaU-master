@@ -37,6 +37,7 @@ class CrearDB:
         return datos
 
     def get_one_sql(self, id_tabla, id_value):
+        """id_tabla: ID de la tabla seleccionada"""
         conexion = self._conectar_db()
         sql = f"SELECT * FROM {self.__nombre_tabla} WHERE {id_tabla}={id_value};"
         cursor = conexion.cursor()
@@ -53,6 +54,7 @@ class CrearDB:
         conexion = self._conectar_db()
         sql = f"INSERT INTO {self.__nombre_tabla} ({columnas}) VALUES ({sql_values});"
         cursor = conexion.cursor()
+        print(sql)
         cursor.execute(sql)
         conexion.commit()
         conexion.close()
@@ -67,7 +69,7 @@ class CrearDB:
 
     def update_sql(self, **kwargs):
         """
-        Pasar como primer argumento el nombre de la tabla y como segundo las claves y valores
+        Pasar como primer argumento las claves y valores
         que se van a actualizar teniendo en cuenta que se debe pasar como primer instancia el ID
         """
         conexion = self._conectar_db()
@@ -101,6 +103,7 @@ class CrearDB:
             return False
         # print("Hay coincidencias")
         return (datos[0], datos[2], datos[5])
+        # return (datos)
 
 
 
@@ -109,19 +112,31 @@ class CrearDB:
 
 if __name__ == "__main__":
     
-    columnas = """(
-                "id"	INTEGER NOT NULL,
-                "usuario"	VARCHAR(50) NOT NULL UNIQUE,
-                "contrasenia"	VARCHAR(50) NOT NULL,
-                "correo"	VARCHAR(50),
-                "direccion"	VARCHAR(100),
-                "is_admin" 	INTEGER(1) NOT NULL,
-                PRIMARY KEY("id" AUTOINCREMENT)
-              )"""
+    # columnas = """(
+    #             "id"	INTEGER NOT NULL,
+    #             "usuario"	VARCHAR(50) NOT NULL UNIQUE,
+    #             "contrasenia"	VARCHAR(50) NOT NULL,
+    #             "correo"	VARCHAR(50),
+    #             "direccion"	VARCHAR(100),
+    #             "is_admin" 	INTEGER(1) NOT NULL,
+    #             PRIMARY KEY("id" AUTOINCREMENT)
+    #           )"""
     
-    tabla_persona = CrearDB('usuario', columnas)
+    # tabla_persona = CrearDB('usuario', columnas)
+    __columnas = """(
+                                "id_carrito"	INTEGER NOT NULL,
+                                "usuario"	VARCHAR(50) NOT NULL,
+                                "direccion"	VARCHAR(100),
+                                "lista_productos" TEXT NOT NULL,
+                                "total" REAL NOT NULL,
+                                "cantidad_productos" INTEGER NOT NULL,
+                                "fecha_hora" DATE NOT NULL,
+                                PRIMARY KEY("id_carrito" AUTOINCREMENT)
+                                )"""
+    table = CrearDB("carrito", __columnas)
+    table.crear_tabla()
     # tabla_persona.crear_tabla()
-    tabla_persona.insert_sql('usuario, contrasenia, correo, direccion, is_admin', '"carlos", "perez", "luis@carlos.com", "av siempre viva", 0')
+    # tabla_persona.insert_sql('usuario, contrasenia, correo, direccion, is_admin', '"carlos", "perez", "luis@carlos.com", "av siempre viva", 0')
     # print(tabla_persona.sql_search('usuario', 'luis3'))
     # print(tabla_persona.get_sql())
     # tabla_persona.delete_sql('id',2)

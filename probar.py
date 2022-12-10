@@ -1,32 +1,32 @@
-import sqlite3
-conexion = sqlite3.connect('supermarket.db')
-# Creamos el cursor
-cursor = conexion.cursor()
-columnas = """(                                                
-                                "id"	INTEGER NOT NULL,
-                                "nombre"	VARCHAR(50) NOT NULL UNIQUE,
-                                "stock"	INTEGER NOT NULL,
-                                "precio"	REAL NOT NULL,
-                                "categoria" VARCHAR(50) NOT NULL,
-                                "descripcion"	TEXT,
-                                PRIMARY KEY("id" AUTOINCREMENT)
-                                )"""
-# Creamos una tabla de usuarios con nombres, edades y emails
+# import sqlite3
+# conexion = sqlite3.connect('supermarket.db')
+# # Creamos el cursor
+# cursor = conexion.cursor()
+# columnas = """(                                                
+#                                 "id"	INTEGER NOT NULL,
+#                                 "nombre"	VARCHAR(50) NOT NULL UNIQUE,
+#                                 "stock"	INTEGER NOT NULL,
+#                                 "precio"	REAL NOT NULL,
+#                                 "categoria" VARCHAR(50) NOT NULL,
+#                                 "descripcion"	TEXT,
+#                                 PRIMARY KEY("id" AUTOINCREMENT)
+#                                 )"""
+# # Creamos una tabla de usuarios con nombres, edades y emails
 
-# cursor.execute(f"CREATE TABLE IF NOT EXISTS producto {columnas}")
-import json
-ruta = 'sin_id.json'
-with open(ruta) as contenido:
-    datos = json.load(contenido)
-    for dato in datos:
-        try:
-            print(dato['categoria'])
-            cursor.execute(f"INSERT INTO producto('nombre', 'stock', 'precio', 'categoria', 'descripcion') VALUES('{dato['nombre']}', '{dato['stock']}', '{dato['precio']}', '{dato['categoria']}', '{dato['descripcion']}')")
-            conexion.commit()
-        except:
-            pass
+# # cursor.execute(f"CREATE TABLE IF NOT EXISTS producto {columnas}")
+# import json
+# ruta = 'sin_id.json'
+# with open(ruta) as contenido:
+#     datos = json.load(contenido)
+#     for dato in datos:
+#         try:
+#             print(dato['categoria'])
+#             cursor.execute(f"INSERT INTO producto('nombre', 'stock', 'precio', 'categoria', 'descripcion') VALUES('{dato['nombre']}', '{dato['stock']}', '{dato['precio']}', '{dato['categoria']}', '{dato['descripcion']}')")
+#             conexion.commit()
+#         except:
+#             pass
         
-conexion.close()
+# conexion.close()
 # cursor.execute("INSERT INTO orders('OrderNumber', 'PersonID') VALUES(15, 3)")
 
 # cursor.execute("""CREATE TABLE IF NOT EXISTS usuario(
@@ -62,3 +62,8 @@ conexion.close()
 # conexion2.close()
 
 # frame_1 = Frame(window, height=539, width=386, background='red')
+
+from datetime import datetime
+
+año = datetime.now()
+print(año.strftime('%d/%m/%Y - %H:%m:%S'))

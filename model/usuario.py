@@ -78,8 +78,8 @@ class Usuario:
             self.valor = self.table.sql_search('usuario', usuario.get())
 
             if self.valor[2] == 1:
-                print("Se espera la vista admin")
-                return True
+                window.destroy()
+                return v_admin.Administrador()
             if self.valor[1] == contrasenia.get():
                 
                 window.destroy()

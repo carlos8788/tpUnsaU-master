@@ -1,12 +1,13 @@
 from pathlib import Path
 # import __init__
-from tkinter import Tk, Canvas, Entry, Button, PhotoImage, Frame, ttk, Label, Scrollbar, IntVar, messagebox, StringVar
+from tkinter import Tk, Canvas, Entry, Button, PhotoImage, Frame, ttk, Label, Scrollbar, IntVar, messagebox, StringVar, Spinbox
 
 # from database import producto_db
 # from clases.producto import get_products, record
 from model.carrito import Carrito
 from model.producto import Producto
-
+from views.v_modificar_cantidad import ModificarCantidad
+from views.v_comprar import Comprar
 
 class VistaUsuario:
     def __init__(self, nombre_usuario):
@@ -46,7 +47,7 @@ class VistaUsuario:
             borderwidth=0,
             highlightthickness=0,
             # command=lambda: self.carrito.comprar(),
-            command=lambda: print("boton comprar"),
+            command=lambda: Comprar(self.__nombre_usuario, self.tabla_carrito),
             relief="flat"
         )
         self.button_1.place(
@@ -58,14 +59,14 @@ class VistaUsuario:
 
         self.button_image_2 = PhotoImage(
             file=relative_to_assets("button_2.png"))
-        self.button_2 = Button(
+        self.borrar_carrito = Button(
             image=self.button_image_2,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_2 clicked"),
+            command=lambda: self.carrito.borrar_carrito(self.tabla, self.tabla_carrito),
             relief="flat"
         )
-        self.button_2.place(
+        self.borrar_carrito.place(
             x=791.0,
             y=603.0,
             width=176.0,
@@ -78,7 +79,7 @@ class VistaUsuario:
             image=self.button_image_3,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: self.carrito.borrar_item(self.tabla_carrito),
+            command=lambda: self.carrito.borrar_item(self.tabla, self.tabla_carrito),
             relief="flat"
         )
         self.button_3.place(
@@ -90,14 +91,16 @@ class VistaUsuario:
 
         self.button_image_4 = PhotoImage(
             file=relative_to_assets("button_4.png"))
-        self.button_4 = Button(
+        self.modif_cantidad = Button(
             image=self.button_image_4,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_4 clicked"),
+            # command=lambda: print("Hola"),
+            command=lambda: ModificarCantidad(self.tabla, self.tabla_carrito),
+            # command=lambda: self.carrito._traer_producto(self.tabla_carrito),
             relief="flat"
         )
-        self.button_4.place(
+        self.modif_cantidad.place(
             x=791.0,
             y=469.0,
             width=176.0,
@@ -115,6 +118,7 @@ class VistaUsuario:
             # command=lambda: insertar_en_carrito(self.tabla_carrito, self.entrada.get(), self.insertar_producto),####################################
             # command=lambda: print(self.lista),
             command=lambda: self.carrito.insertar_en_carrito(
+                self.tabla,
                 self.tabla_carrito, 
                 self.lista,
                 self.entrada,
@@ -271,17 +275,27 @@ class VistaUsuario:
             308.5,
             image=self.entry_image_5
         )
-        self.entrada = IntVar()
-        self.entrada.set('')
-
-        self.entry_5 = Entry(
-            bd=0,
-            bg="#D9D9D9",
-            fg="#000716",
-            highlightthickness=0,
-            textvariable=self.entrada
-        )
-        self.entry_5.place(
+        ####################### ENTRADA ##################################################################################
+        self.entrada = StringVar()
+        
+        # print(self.entrada)
+        self.spin = Spinbox(
+            bd=0, 
+            bg="#D9D9D9", 
+            fg="#000716", 
+            highlightthickness=0, 
+            from_=1, 
+            to=1,
+            font=("Inter", 16 * -1),
+            textvariable=self.entrada)
+        # self.entry_5 = Entry(
+        #     bd=0,
+        #     bg="#D9D9D9",
+        #     fg="#000716",
+        #     highlightthickness=0,
+        #     textvariable=self.entrada
+        # )
+        self.spin.place(
             x=793.0,
             y=294.0,
             width=179.0,
@@ -433,7 +447,8 @@ class VistaUsuario:
             fill="#000000",
             font=("Inter", 16 * -1)
         )
-        self.tabla_carrito.bind("<<TreeviewSelect>>", self.hola)
+
+        self.tabla_carrito.bind("<<TreeviewSelect>>",self.seleccion)
         
 
 
@@ -479,22 +494,32 @@ class VistaUsuario:
         self.precio.config(text=data[2])
         self.stock.config(text=data[1])
         self.product.config(text=data[0])
+        self.spin.config(to=data[1])
         self.lista.append(data[0])
         self.lista.append(data[2])
+        self.lista.append(data[1])
+
         # print(self.lista)
 
-    def hola(self, evento):
+    def seleccion(self, event):
         records = self.tabla_carrito.focus()
         data = self.tabla_carrito.item(records)
-        print(data["text"], data["values"])
+        # print(data["text"], data["values"])
 
     
             
 
-    def capturar_entrada(self):
-        try:
-            return self.entrada.get()
-        except:
-            return messagebox.showerror("Error de datos", "Por favor compruebe el dato ingresado")
+    # def capturar_entrada(self):
+    #     try:
+    #         return self.entrada.get()
+    #     except:
+    #         return messagebox.showerror("Error de datos", "Por favor compruebe el dato ingresado")
+    
+    # def borrar_carritos(self, tabla_origen ,treeview):
+        # records = self.tabla_carrito.get_children()
+        # print(records)
+        # for i in records:
+        #     data = self.tabla_carrito.item(i)
+        #     print(data)
 
 # vista = VistaUsuario()
