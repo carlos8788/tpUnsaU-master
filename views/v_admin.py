@@ -7,65 +7,186 @@ from pathlib import Path
 
 # from tkinter import *
 # Explicit imports to satisfy Flake8
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
+from tkinter import Tk, Canvas, Scrollbar, ttk, Button, PhotoImage
+from model import producto, usuario, carrito
+from views import v_agregar_producto
 
-class Administrador:
+class VistaAdministrador:
     def __init__(self):
                 
         OUTPUT_PATH = Path(__file__).parent
         ASSETS_PATH = OUTPUT_PATH / Path(r"assets_admin\frame0")
 
-
+        self.producto = producto.Producto(None, None, None, None, None)
+        self.carrito = carrito.Carrito(None, None)
+        self.usuario = usuario.Usuario(None, None, None, None, None)
         def relative_to_assets(path: str) -> Path:
             return ASSETS_PATH / Path(path)
 
 
-        window = Tk()
+        self.window = Tk()
 
-        window.geometry("850x642")
-        window.configure(bg = "#FFFFFF")
+        self.window.geometry("850x642")
+        self.window.configure(bg = "#FFFFFF")
+        
 
+        # canvas = Canvas(
+        #     self.window,
+        #     bg = "#FFFFFF",
+        #     height = 642,
+        #     width = 723,
+        #     bd = 0,
+        #     highlightthickness = 0,
+        #     relief = "ridge"
+        # )
 
-        canvas = Canvas(
-            window,
-            bg = "#FFFFFF",
-            height = 642,
-            width = 723,
-            bd = 0,
-            highlightthickness = 0,
-            relief = "ridge"
+        # canvas.place(x = 0, y = 0)
+        
+        self.tabla_producto = ttk.Treeview(self.window,
+                                  columns=('col1', 'col2', 'col3', 'col4', 'col5'))
+
+        # self.tabla.configure("mystyle.Treeview", background='light blue')
+
+        self.tabla_producto.place(
+            x=26,
+            y=44,
+            width=614.0,
+            height=169.0
+        )
+        self.tabla_producto.column('#0', width=15)
+        self.tabla_producto.column('col1', width=75)
+        self.tabla_producto.column('col2', width=15)
+        self.tabla_producto.column('col3', width=20)
+        self.tabla_producto.column('col4', width=40)
+        self.tabla_producto.column('col5', width=75)
+
+        self.tabla_producto.heading('#0', text='ID_PRODUCTO')
+        self.tabla_producto.heading('col1', text='NOMBRE')
+        self.tabla_producto.heading('col2', text='STOCK')
+        self.tabla_producto.heading('col3', text='PRECIO')
+        self.tabla_producto.heading('col4', text='CATEGORIA')
+        self.tabla_producto.heading('col5', text='DESCRIPCIÓN')
+
+        self.barra_productos = Scrollbar(self.window, orient='vertical',
+                               command=self.tabla_producto.yview)
+        
+        self.barra_productos.place(
+            x=622.5,
+            y=44,
+            bordermode='inside',
+            height=169
+
         )
 
-        canvas.place(x = 0, y = 0)
-
-        canvas.create_rectangle(
-            26.0,#X
-            44.0,#Y
-            640.0,#ANCHO
-            213.0,#ALTO
-            fill="red",
-            outline="")#Producto
-
-
-        canvas.create_rectangle(
-                    26.0,
-                    236.0,
-                    640.0,
-                    405.0,
-                    fill="blue",
-                    outline="")#USUARIO
-
-
-        canvas.create_rectangle(
-            26.0,
-            428.0,
-            640.0,
-            597.0,
-            fill="#D9D9D9",
-            outline="")#CARRITO
+        self.tabla_producto.config(yscrollcommand=self.barra_productos.set)
+        self.producto.get_products(self.tabla_producto)
 
         
 
+
+
+        # canvas.create_rectangle(
+        #     26.0,#X
+        #     44.0,#Y
+        #     640.0,#ANCHO
+        #     213.0,#ALTO
+        #     fill="red",
+        #     outline="")#Producto
+
+
+        # canvas.create_rectangle(
+        #             26.0,
+        #             236.0,
+        #             640.0,
+        #             405.0,
+        #             fill="blue",
+        #             outline="")#USUARIO
+
+        self.tabla_usuario = ttk.Treeview(self.window,
+                                  columns=('col1', 'col2', 'col3', 'col4', 'col5'))
+
+        # self.tabla.configure("mystyle.Treeview", background='light blue')
+
+        self.tabla_usuario.place(
+            x=26,
+            y=236,
+            width=614.0,
+            height=169.0
+        )
+        self.tabla_usuario.column('#0', width=10)
+        self.tabla_usuario.column('col1', width=40)
+        self.tabla_usuario.column('col2', width=40)
+        self.tabla_usuario.column('col3', width=50)
+        self.tabla_usuario.column('col4', width=40)
+        self.tabla_usuario.column('col5', width=10)
+
+        self.tabla_usuario.heading('#0', text='ID_USUARIO')
+        self.tabla_usuario.heading('col1', text='USUARIO')
+        self.tabla_usuario.heading('col2', text='PASSWORD')
+        self.tabla_usuario.heading('col3', text='CORREO')
+        self.tabla_usuario.heading('col4', text='DIRECCION')
+        self.tabla_usuario.heading('col5', text='ADMIN')
+
+        self.barra_usuarios = Scrollbar(self.window, orient='vertical',
+                               command=self.tabla_usuario.yview)
+        
+        self.barra_usuarios.place(
+            x=622.5,
+            y=236,
+            bordermode='inside',
+            height=169
+
+        )
+
+        self.tabla_usuario.config(yscrollcommand=self.barra_usuarios.set)
+        self.usuario.usuarios(self.tabla_usuario)
+
+        # canvas.create_rectangle(
+        #     26.0,
+        #     428.0,
+        #     640.0,
+        #     597.0,
+        #     fill="#D9D9D9",
+        #     outline="")#CARRITO
+
+        self.tabla_carrito = ttk.Treeview(self.window,
+                                  columns=('col1', 'col2', 'col3', 'col4', 'col5'))
+
+        # self.tabla.configure("mystyle.Treeview", background='light blue')
+
+        self.tabla_carrito.place(
+            x=26,
+            y=428,
+            width=614.0,
+            height=169.0
+        )
+        self.tabla_carrito.column('#0', width=15)
+        self.tabla_carrito.column('col1', width=60)
+        self.tabla_carrito.column('col2', width=100)
+        self.tabla_carrito.column('col3', width=40)
+        self.tabla_carrito.column('col4', width=60)
+        self.tabla_carrito.column('col5', width=150)
+
+        self.tabla_carrito.heading('#0', text='ID_CARRITO')
+        self.tabla_carrito.heading('col1', text='USUARIO')
+        self.tabla_carrito.heading('col2', text='DIRECCION')
+        self.tabla_carrito.heading('col3', text='TOTAL')
+        self.tabla_carrito.heading('col4', text='CANTIDAD')
+        self.tabla_carrito.heading('col5', text='FECHA')
+
+        self.barra_carrito = Scrollbar(self.window, orient='vertical',
+                               command=self.tabla_carrito.yview)
+        
+        self.barra_carrito.place(
+            x=622.5,
+            y=428,
+            bordermode='inside',
+            height=169
+
+        )
+
+        self.tabla_carrito.config(yscrollcommand=self.barra_carrito.set)
+        self.carrito.get_carrito(self.tabla_carrito)
         
 
         button_image_1 = PhotoImage(
@@ -150,18 +271,18 @@ class Administrador:
 
         button_image_6 = PhotoImage(
             file=relative_to_assets("button_6.png"))
-        button_6 = Button(
+        self.button_agregar_producto = Button(
             image=button_image_6,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_6 clicked"),
+            command=lambda: v_agregar_producto.AgregarProducto(self.window, self.tabla_producto),
             relief="flat"
         )
-        button_6.place(
+        self.button_agregar_producto.place(
             x=660.0,
             y=69.0,
             width=141.0,
             height=29.0
         )
-        window.resizable(False, False)
-        window.mainloop()
+        self.window.resizable(False, False)
+        self.window.mainloop()

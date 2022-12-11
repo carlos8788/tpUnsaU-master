@@ -79,7 +79,7 @@ class Usuario:
 
             if self.valor[2] == 1:
                 window.destroy()
-                return v_admin.Administrador()
+                return v_admin.VistaAdministrador()
             if self.valor[1] == contrasenia.get():
                 
                 window.destroy()
@@ -153,6 +153,13 @@ class Usuario:
         self._habilitar_boton(boton)
         window.destroy()
 
+    def usuarios(self, treeview):
+
+        db_rows = self.table.get_sql()
+        # print(db_rows)
+        for row in db_rows:
+            treeview.insert('', 0, text=row[0], values=(
+                row[1], row[2], row[3], row[4], row[5]))
 
 
 if __name__ == "__main__":

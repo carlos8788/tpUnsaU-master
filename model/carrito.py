@@ -242,3 +242,11 @@ class Carrito:
         self.table.insert_sql(
             'usuario, direccion, lista_productos, total, cantidad_productos, fecha_hora',
             f'"{usuario_completo[1]}", "{usuario_completo[4]}", "{lista[0]}", "{lista[1]}", "{lista[2]}", "{fecha}"')
+
+    def get_carrito(self, treeview):
+
+        db_rows = self.table.get_sql()
+        print(db_rows)
+        for row in db_rows:
+            treeview.insert('', 0, text=row[0], values=(
+                row[1], row[2], f"${row[4]}", row[5], row[6]))
