@@ -54,7 +54,7 @@ class CrearDB:
         conexion = self._conectar_db()
         sql = f"INSERT INTO {self.__nombre_tabla} ({columnas}) VALUES ({sql_values});"
         cursor = conexion.cursor()
-        print(sql)
+        # print(sql)
         cursor.execute(sql)
         conexion.commit()
         conexion.close()

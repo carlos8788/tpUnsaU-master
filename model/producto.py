@@ -76,6 +76,13 @@ class Producto:
             if row[2]> 0:
                 # print(row)
                 self._carga_tree(treeview, row)
+                
+    def get_products_admin(self, treeview):
+
+        db_rows = self.table.get_sql()
+        for row in db_rows:
+
+            self._carga_tree(treeview, row)
 
         # for x,y in self.dict_datos.items():
         #     print(x, y)

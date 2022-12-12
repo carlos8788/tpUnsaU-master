@@ -7,19 +7,21 @@ from pathlib import Path
 
 # from tkinter import *
 # Explicit imports to satisfy Flake8
-from tkinter import Tk, Canvas, Scrollbar, ttk, Button, PhotoImage
-from model import producto, usuario, carrito
-from views import v_agregar_producto
+from tkinter import Tk, Canvas, Scrollbar, ttk, Button, PhotoImage, messagebox, Label
+from model import producto, usuario, carrito, administrador
+from views import v_agregar_producto, v_editar_producto, v_editar_usuario
 
 class VistaAdministrador:
-    def __init__(self):
-                
+    def __init__(self, admin_name):
+        # print(admin_name)
+        self.admin_name = admin_name                
         OUTPUT_PATH = Path(__file__).parent
         ASSETS_PATH = OUTPUT_PATH / Path(r"assets_admin\frame0")
 
         self.producto = producto.Producto(None, None, None, None, None)
         self.carrito = carrito.Carrito(None, None)
         self.usuario = usuario.Usuario(None, None, None, None, None)
+        self.admin = administrador.Administrador()
         def relative_to_assets(path: str) -> Path:
             return ASSETS_PATH / Path(path)
 
@@ -42,6 +44,16 @@ class VistaAdministrador:
 
         # canvas.place(x = 0, y = 0)
         
+        # print(self.usuario)
+
+        self.usuario_name = f"Bienvenid@ {self.admin_name}"
+        self.titulo = Label(self.window, text=self.usuario_name, font=("Inter", 20 * -1),bg = "#FFFFFF")
+        self.titulo.place(
+            x=325,
+            y=12,
+            # 
+        )
+
         self.tabla_producto = ttk.Treeview(self.window,
                                   columns=('col1', 'col2', 'col3', 'col4', 'col5'))
 
@@ -79,9 +91,9 @@ class VistaAdministrador:
         )
 
         self.tabla_producto.config(yscrollcommand=self.barra_productos.set)
-        self.producto.get_products(self.tabla_producto)
+        self.producto.get_products_admin(self.tabla_producto)
 
-        
+        self.tabla_producto.bind("<<TreeviewSelect>>", self.on_tree_select)
 
 
 
@@ -140,6 +152,8 @@ class VistaAdministrador:
 
         self.tabla_usuario.config(yscrollcommand=self.barra_usuarios.set)
         self.usuario.usuarios(self.tabla_usuario)
+        self.tabla_usuario.bind("<<TreeviewSelect>>", self.edit_user)
+        
 
         # canvas.create_rectangle(
         #     26.0,
@@ -187,6 +201,8 @@ class VistaAdministrador:
 
         self.tabla_carrito.config(yscrollcommand=self.barra_carrito.set)
         self.carrito.get_carrito(self.tabla_carrito)
+        self.tabla_carrito.bind("<<TreeviewSelect>>", self.carrito_seleccionado)
+        
         
 
         button_image_1 = PhotoImage(
@@ -195,7 +211,7 @@ class VistaAdministrador:
             image=button_image_1,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_1 clicked"),
+            command=lambda: self.delete_carrito(),
             relief="flat"
         )
         button_1.place(
@@ -211,7 +227,7 @@ class VistaAdministrador:
             image=button_image_2,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_2 clicked"),
+            command=lambda: self.delete_user(),
             relief="flat"
         )
         button_2.place(
@@ -223,14 +239,14 @@ class VistaAdministrador:
 
         button_image_3 = PhotoImage(
             file=relative_to_assets("button_3.png"))
-        button_3 = Button(
+        edit_usuario = Button(
             image=button_image_3,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_3 clicked"),
+            command=lambda: self.crear_vista_edit_usuario(),
             relief="flat"
         )
-        button_3.place(
+        edit_usuario.place(
             x=660.0,
             y=284.0,
             width=141.0,
@@ -243,7 +259,7 @@ class VistaAdministrador:
             image=button_image_4,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_4 clicked"),
+            command=lambda: self.eliminar(),
             relief="flat"
         )
         button_4.place(
@@ -255,14 +271,17 @@ class VistaAdministrador:
 
         button_image_5 = PhotoImage(
             file=relative_to_assets("button_5.png"))
-        button_5 = Button(
+        self.boton_editar_producto = Button(
             image=button_image_5,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_5 clicked"),
+            command=lambda: self.crear_vista(),
             relief="flat"
-        )
-        button_5.place(
+            )
+            
+            
+        
+        self.boton_editar_producto.place(
             x=660.0,
             y=114.0,
             width=141.0,
@@ -276,6 +295,7 @@ class VistaAdministrador:
             borderwidth=0,
             highlightthickness=0,
             command=lambda: v_agregar_producto.AgregarProducto(self.window, self.tabla_producto),
+            # command=lambda:print("holas"),
             relief="flat"
         )
         self.button_agregar_producto.place(
@@ -286,3 +306,104 @@ class VistaAdministrador:
         )
         self.window.resizable(False, False)
         self.window.mainloop()
+
+
+    def on_tree_select(self, tabla):
+        self.current_item = self.tabla_producto.focus()
+        # if not self.current_item:
+        #     return messagebox.showerror("Error", "No seleccionó ningún producto")
+
+        data = self.tabla_producto.item(self.current_item)
+
+        lista = data['values']
+        try:
+            lista.insert(0, data['text'])
+        except:
+            pass
+        return lista
+        
+ 
+    def crear_vista(self):
+        lista = self.on_tree_select(None)
+        
+        if lista == "":
+            return messagebox.showerror("Error", "No seleccionó ningún producto")
+        return v_editar_producto.EditarProducto(
+                    self.window, 
+                    self.tabla_producto,
+                    lista)
+    
+    def eliminar(self):
+        lista = self.on_tree_select(None)
+        # print(lista)
+        if lista == "":
+            return messagebox.showerror("Error", "No seleccionó ningún producto")
+        return self.admin.eliminar_producto(self.tabla_producto, lista[0])
+
+
+    def edit_user(self, tabla):
+        self.current_item = self.tabla_usuario.focus()
+        # if not self.current_item:
+        #     return messagebox.showerror("Error", "No seleccionó ningún producto")
+
+        data = self.tabla_usuario.item(self.current_item)
+
+        lista = data['values']
+        try:
+            lista.insert(0, data['text'])
+        except:
+            pass
+        return lista
+    
+    def crear_vista_edit_usuario(self):
+        lista = self.edit_user(None)
+        
+        if lista == "":
+            return messagebox.showerror("Error", "No seleccionó ningún usuario")
+        return v_editar_usuario.EditarUsuario(
+                    self.window, 
+                    self.tabla_usuario,
+                    lista)
+    
+    def delete_user(self):
+        lista = self.edit_user(None)
+        # print(lista)
+        if lista == "":
+            return messagebox.showerror("Error", "No seleccionó ningún usuario")
+        return self.admin.eliminar_usuario(self.tabla_usuario, lista[0])
+    
+    def edit_user(self, tabla):
+        self.current_item = self.tabla_usuario.focus()
+        # if not self.current_item:
+        #     return messagebox.showerror("Error", "No seleccionó ningún producto")
+
+        data = self.tabla_usuario.item(self.current_item)
+
+        lista = data['values']
+        try:
+            lista.insert(0, data['text'])
+        except:
+            pass
+        return lista
+    
+    def carrito_seleccionado(self, tabla):
+        self.current_item = self.tabla_carrito.focus()
+        # if not self.current_item:
+        #     return messagebox.showerror("Error", "No seleccionó ningún producto")
+
+        data = self.tabla_carrito.item(self.current_item)
+
+        lista = data['values']
+        try:
+            lista.insert(0, data['text'])
+        except:
+            pass
+        return lista
+    
+    def delete_carrito(self):
+        lista = self.carrito_seleccionado(None)
+        # print(lista)
+        if lista == "":
+            return messagebox.showerror("Error", "No seleccionó ningún carrito")
+        return self.admin.eliminar_carrito(self.tabla_carrito, lista[0])
+    

@@ -226,15 +226,18 @@ class Carrito:
     def cancelar_compra(self, window):
         window.destroy()
     
-    def comprar(self, usuario, lista):
-        print(lista, usuario)
-        print("guardar_carrito----------")
-        # self.guardar_carrito(usuario)
-        for i in lista[0]:
-            print(i)
+    def comprar(self, window, treeview, usuario, lista):
+        # print(lista, usuario)
+        # print("guardar_carrito----------")
+        # # self.guardar_carrito(usuario)
+        # for i in lista[0]:
+        #     print(i)
         fecha_hora = datetime.now()
         format_fecha = fecha_hora.strftime('%d/%m/%Y - %H:%m:%S')
         self.guardar_carrito(usuario, lista, format_fecha)
+        self._refresh_treeview(treeview)
+        messagebox.showinfo("Compra", "Su compra se ha realizado correctamente")
+        window.destroy()
 
     def guardar_carrito(self, usuario, lista, fecha):
         buscar_usuario = self.table_usuario.sql_search("usuario", usuario)
@@ -246,7 +249,7 @@ class Carrito:
     def get_carrito(self, treeview):
 
         db_rows = self.table.get_sql()
-        print(db_rows)
+        # print(db_rows)
         for row in db_rows:
             treeview.insert('', 0, text=row[0], values=(
                 row[1], row[2], f"${row[4]}", row[5], row[6]))

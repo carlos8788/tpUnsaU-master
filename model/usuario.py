@@ -79,7 +79,7 @@ class Usuario:
 
             if self.valor[2] == 1:
                 window.destroy()
-                return v_admin.VistaAdministrador()
+                return v_admin.VistaAdministrador(usuario.get())
             if self.valor[1] == contrasenia.get():
                 
                 window.destroy()

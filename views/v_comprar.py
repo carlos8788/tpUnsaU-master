@@ -105,7 +105,7 @@ class Comprar:
             image=button_image_1,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: self.carrito.comprar(self.__usuario, self.carrito_preparado),
+            command=lambda: self.carrito.comprar(self.window_2, self.__tabla_carrito, self.__usuario, self.carrito_preparado),
             relief="flat"
         )
         button_1.place(
