@@ -19,11 +19,6 @@ class ModificarCantidad:
             ASSETS_PATH = OUTPUT_PATH / Path(r"assets_mod_cant\frame0")
 
             self.carrito = Carrito(None, None)
-            # self.carrito.borrar_item(tabla_origen, tabla_destino)
-            
-            
-            
-            # print(self.item, "DESDE MOSDIFICAR CANIDA")
 
             def relative_to_assets(path: str) -> Path:
                 return ASSETS_PATH / Path(path)
@@ -70,13 +65,6 @@ class ModificarCantidad:
                 height=27.0
             )
 
-            # self.canvas.create_rectangle(
-            #     217.0,
-            #     84.0,
-            #     396.0,
-            #     113.0,
-            #     fill="#FFD2D2",
-            #     outline="")
             self.cant_max = Label(
                 self.window_2,
                 text=self.item[2],
@@ -86,7 +74,7 @@ class ModificarCantidad:
                 bg="#FFD2D2",
                 fg="#000716",
                 highlightthickness=0,
-                #  textvariable=self.descripcion_text
+ 
             )
 
             self.cant_max.place(
@@ -162,5 +150,3 @@ class ModificarCantidad:
         except:
             pass
 
-if __name__ == "__main__":
-    var = ModificarCantidad()

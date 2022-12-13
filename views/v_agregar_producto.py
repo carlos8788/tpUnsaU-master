@@ -117,6 +117,3 @@ class AgregarProducto:
 
         self.window_2.resizable(True, True)
         self.window_2.mainloop()
-
-if __name__ == "__main__":
-    agregar_a_carrito = AgregarProducto()

@@ -7,7 +7,7 @@ from pathlib import Path
 
 # from tkinter import *
 # Explicit imports to satisfy Flake8
-from tkinter import Tk, Canvas, Scrollbar, ttk, Button, PhotoImage, messagebox, Label
+from tkinter import Tk, Scrollbar, ttk, Button, PhotoImage, messagebox, Label
 from model import producto, usuario, carrito, administrador
 from views import v_agregar_producto, v_editar_producto, v_editar_usuario
 
@@ -30,21 +30,7 @@ class VistaAdministrador:
 
         self.window.geometry("850x642")
         self.window.configure(bg = "#FFFFFF")
-        
-
-        # canvas = Canvas(
-        #     self.window,
-        #     bg = "#FFFFFF",
-        #     height = 642,
-        #     width = 723,
-        #     bd = 0,
-        #     highlightthickness = 0,
-        #     relief = "ridge"
-        # )
-
-        # canvas.place(x = 0, y = 0)
-        
-        # print(self.usuario)
+ 
 
         self.usuario_name = f"Bienvenid@ {self.admin_name}"
         self.titulo = Label(self.window, text=self.usuario_name, font=("Inter", 20 * -1),bg = "#FFFFFF")
@@ -57,7 +43,6 @@ class VistaAdministrador:
         self.tabla_producto = ttk.Treeview(self.window,
                                   columns=('col1', 'col2', 'col3', 'col4', 'col5'))
 
-        # self.tabla.configure("mystyle.Treeview", background='light blue')
 
         self.tabla_producto.place(
             x=26,
@@ -96,28 +81,9 @@ class VistaAdministrador:
         self.tabla_producto.bind("<<TreeviewSelect>>", self.on_tree_select)
 
 
-
-        # canvas.create_rectangle(
-        #     26.0,#X
-        #     44.0,#Y
-        #     640.0,#ANCHO
-        #     213.0,#ALTO
-        #     fill="red",
-        #     outline="")#Producto
-
-
-        # canvas.create_rectangle(
-        #             26.0,
-        #             236.0,
-        #             640.0,
-        #             405.0,
-        #             fill="blue",
-        #             outline="")#USUARIO
-
         self.tabla_usuario = ttk.Treeview(self.window,
                                   columns=('col1', 'col2', 'col3', 'col4', 'col5'))
 
-        # self.tabla.configure("mystyle.Treeview", background='light blue')
 
         self.tabla_usuario.place(
             x=26,
@@ -155,18 +121,10 @@ class VistaAdministrador:
         self.tabla_usuario.bind("<<TreeviewSelect>>", self.edit_user)
         
 
-        # canvas.create_rectangle(
-        #     26.0,
-        #     428.0,
-        #     640.0,
-        #     597.0,
-        #     fill="#D9D9D9",
-        #     outline="")#CARRITO
 
         self.tabla_carrito = ttk.Treeview(self.window,
                                   columns=('col1', 'col2', 'col3', 'col4', 'col5'))
 
-        # self.tabla.configure("mystyle.Treeview", background='light blue')
 
         self.tabla_carrito.place(
             x=26,
@@ -295,7 +253,6 @@ class VistaAdministrador:
             borderwidth=0,
             highlightthickness=0,
             command=lambda: v_agregar_producto.AgregarProducto(self.window, self.tabla_producto),
-            # command=lambda:print("holas"),
             relief="flat"
         )
         self.button_agregar_producto.place(
@@ -310,8 +267,6 @@ class VistaAdministrador:
 
     def on_tree_select(self, tabla):
         self.current_item = self.tabla_producto.focus()
-        # if not self.current_item:
-        #     return messagebox.showerror("Error", "No seleccionó ningún producto")
 
         data = self.tabla_producto.item(self.current_item)
 
@@ -335,7 +290,6 @@ class VistaAdministrador:
     
     def eliminar(self):
         lista = self.on_tree_select(None)
-        # print(lista)
         if lista == "":
             return messagebox.showerror("Error", "No seleccionó ningún producto")
         return self.admin.eliminar_producto(self.tabla_producto, lista[0])
@@ -343,9 +297,6 @@ class VistaAdministrador:
 
     def edit_user(self, tabla):
         self.current_item = self.tabla_usuario.focus()
-        # if not self.current_item:
-        #     return messagebox.showerror("Error", "No seleccionó ningún producto")
-
         data = self.tabla_usuario.item(self.current_item)
 
         lista = data['values']
@@ -367,15 +318,12 @@ class VistaAdministrador:
     
     def delete_user(self):
         lista = self.edit_user(None)
-        # print(lista)
         if lista == "":
             return messagebox.showerror("Error", "No seleccionó ningún usuario")
         return self.admin.eliminar_usuario(self.tabla_usuario, lista[0])
     
     def edit_user(self, tabla):
         self.current_item = self.tabla_usuario.focus()
-        # if not self.current_item:
-        #     return messagebox.showerror("Error", "No seleccionó ningún producto")
 
         data = self.tabla_usuario.item(self.current_item)
 
@@ -388,8 +336,6 @@ class VistaAdministrador:
     
     def carrito_seleccionado(self, tabla):
         self.current_item = self.tabla_carrito.focus()
-        # if not self.current_item:
-        #     return messagebox.showerror("Error", "No seleccionó ningún producto")
 
         data = self.tabla_carrito.item(self.current_item)
 
@@ -402,7 +348,6 @@ class VistaAdministrador:
     
     def delete_carrito(self):
         lista = self.carrito_seleccionado(None)
-        # print(lista)
         if lista == "":
             return messagebox.showerror("Error", "No seleccionó ningún carrito")
         return self.admin.eliminar_carrito(self.tabla_carrito, lista[0])

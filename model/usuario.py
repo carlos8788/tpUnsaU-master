@@ -118,7 +118,7 @@ class Usuario:
                     if 1 != crear_user.get_is_admin():
                         return v_usuario.VistaUsuario(crear_user.get_usuario())
                     else:
-                        return v_admin.Administrador()
+                        return v_admin.VistaAdministrador(crear_user.get_usuario())
                 except IntegrityError:
                     return messagebox.showerror("Error","El usuario ya existe intente con otro")
             return messagebox.showwarning("Contraseña incorrecta", "Por favor verifique si las contraseñas son iguales")
@@ -156,13 +156,7 @@ class Usuario:
     def usuarios(self, treeview):
 
         db_rows = self.table.get_sql()
-        # print(db_rows)
         for row in db_rows:
             treeview.insert('', 0, text=row[0], values=(
                 row[1], row[2], row[3], row[4], row[5]))
 
-
-if __name__ == "__main__":
-    usuario = Usuario('luis', 'perez', 'cualcuiera', 'contrasenia', 1)
-    comprobar = usuario.comprobar_usuario(usuario.get_usuario(), usuario.get_contrasenia())
-    print(comprobar)

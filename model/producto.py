@@ -18,7 +18,6 @@ class Producto:
                                 PRIMARY KEY("id" AUTOINCREMENT)
                                 )"""
         self.table = CrearDB("producto", self.__columnas)
-        # self.dict_datos = {}
         try:
             self.table.crear_tabla()
         except:
@@ -59,12 +58,7 @@ class Producto:
         self.__categoria = new_categoria
         return self.__categoria
 
-################# SACAR LUEGO DE ACá ##########################################
-    # def _stock_cero(self, producto):
-    #     if producto
-
     def _carga_tree(self, treeview, row):
-            # print(row)
             treeview.insert('', 0, text=row[0], values=(
                 row[1], row[2], row[3], row[4], row[5]))
 
@@ -72,9 +66,7 @@ class Producto:
 
         db_rows = self.table.get_sql()
         for row in db_rows:
-            # self.dict_datos[row[0]]=[row[1], row[2], row[3], row[4], row[5]]
             if row[2]> 0:
-                # print(row)
                 self._carga_tree(treeview, row)
                 
     def get_products_admin(self, treeview):
@@ -84,12 +76,8 @@ class Producto:
 
             self._carga_tree(treeview, row)
 
-        # for x,y in self.dict_datos.items():
-        #     print(x, y)
-
     def record(self, treeview):
         records = treeview.get_children()
-        # print(records)
         for i in records:
             treeview.delete(i)
 
@@ -114,7 +102,6 @@ class Producto:
     
     def cargar_categoria(self, categ_recibida, treeview):
         self.record(treeview)
-        # print(categ_recibida)
         if categ_recibida == "TODAS":
             self.get_products(treeview)
         db_rows = self.table.get_sql()
@@ -122,12 +109,3 @@ class Producto:
             if row[4] == categ_recibida:
                 if row[2] > 0:
                     self._carga_tree(treeview, row)
-    
-    
-        
-
-
-    
-################# SACAR LUEGO DE ACá ##########################################
-if __name__ == "__main__":
-    objeto = Producto(None, None, None, None, None)

@@ -7,7 +7,6 @@ class EditarProducto:
         self.lista = lista
         self.admin = Administrador()
         self.window_2 = Toplevel()
-        # print(self.lista, "EDIAR")
         self.window_2.geometry("500x350+150+300")
         self.window_2.configure(bg = "#E6D5C2")
         self.window_2.overrideredirect(True)
@@ -130,5 +129,3 @@ class EditarProducto:
         self.window_2.resizable(True, True)
         self.window_2.mainloop()
 
-# if __name__ == "__main__":
-    # agregar_a_carrito = AgregarProducto()

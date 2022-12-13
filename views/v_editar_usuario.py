@@ -7,7 +7,6 @@ class EditarUsuario:
         self.lista = lista
         self.admin = Administrador()
         self.window_2 = Toplevel()
-        # print(self.lista, "EDIAR")
         self.window_2.geometry("500x350+150+300")
         self.window_2.configure(bg = "#E6D5C2")
         self.window_2.overrideredirect(True)

@@ -114,10 +114,6 @@ class ResetPass:
             height=27.0
         )
 
-        
-
-        
-
         self.canvas.create_text(
             58.0,
             217.0,
@@ -171,8 +167,6 @@ class ResetPass:
             height=38.0
         )
 
-
-        """###########################################   BOTON    #######################################################"""
         self.button_image_2 = PhotoImage(
             file=relative_to_assets("button_2.png"))
         self.button_2 = Button(
@@ -191,12 +185,3 @@ class ResetPass:
         )
         self.window_2.resizable(True, True)
         self.window_2.mainloop()
-        
-        
-
-    # def restaurar(self, window):
-    #     self.window_2.destroy()
-    #     window.mainloop()
-
-if __name__ == "__main__":
-    vista = ResetPass()

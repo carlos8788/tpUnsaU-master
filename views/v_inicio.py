@@ -448,12 +448,10 @@ class Bienvenida:
         OUTPUT_PATH = Path(__file__).parent
         ASSETS_PATH = OUTPUT_PATH / Path(r"assets_reset\frame0")
 
-        # self.relative_to_assets("assets_reset\frame0")
         def relative_to_assets(path: str) -> Path:
             return ASSETS_PATH / Path(path)
 
 
-        # self.window_2 = Tk()
         self.window_2 = Toplevel(root)
 
         self.window_2.geometry("552x353")
@@ -492,13 +490,3 @@ class Bienvenida:
         OUTPUT_PATH = Path(__file__).parent
         ASSETS_PATH = OUTPUT_PATH / Path(r"assets_inicio\frame0")
         return ASSETS_PATH / Path(path)
-
-    # def funcion(self, frame):
-    #         print("Estoy en funcion")
-    #         frame.pack_forget()
-    #         frame.destroy()
-            # ventana = self.window
-            # return ventana
-    # def abrir_vista(self, clase):
-    #     clase = VistaUsuario()
-    #     return clase

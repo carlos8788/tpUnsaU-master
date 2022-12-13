@@ -54,7 +54,6 @@ class CrearDB:
         conexion = self._conectar_db()
         sql = f"INSERT INTO {self.__nombre_tabla} ({columnas}) VALUES ({sql_values});"
         cursor = conexion.cursor()
-        # print(sql)
         cursor.execute(sql)
         conexion.commit()
         conexion.close()
@@ -97,48 +96,7 @@ class CrearDB:
         datos = cursor.fetchone()
         conexion.commit()
         conexion.close()
-        # print(datos)
         if datos == None:
-            # print("No hay coincidencias")
             return False
-        # print("Hay coincidencias")
         return (datos[0], datos[2], datos[5])
-        # return (datos)
 
-
-
-
-
-
-if __name__ == "__main__":
-    
-    # columnas = """(
-    #             "id"	INTEGER NOT NULL,
-    #             "usuario"	VARCHAR(50) NOT NULL UNIQUE,
-    #             "contrasenia"	VARCHAR(50) NOT NULL,
-    #             "correo"	VARCHAR(50),
-    #             "direccion"	VARCHAR(100),
-    #             "is_admin" 	INTEGER(1) NOT NULL,
-    #             PRIMARY KEY("id" AUTOINCREMENT)
-    #           )"""
-    
-    # tabla_persona = CrearDB('usuario', columnas)
-    __columnas = """(
-                                "id_carrito"	INTEGER NOT NULL,
-                                "usuario"	VARCHAR(50) NOT NULL,
-                                "direccion"	VARCHAR(100),
-                                "lista_productos" TEXT NOT NULL,
-                                "total" REAL NOT NULL,
-                                "cantidad_productos" INTEGER NOT NULL,
-                                "fecha_hora" DATE NOT NULL,
-                                PRIMARY KEY("id_carrito" AUTOINCREMENT)
-                                )"""
-    table = CrearDB("carrito", __columnas)
-    table.crear_tabla()
-    # tabla_persona.crear_tabla()
-    # tabla_persona.insert_sql('usuario, contrasenia, correo, direccion, is_admin', '"carlos", "perez", "luis@carlos.com", "av siempre viva", 0')
-    # print(tabla_persona.sql_search('usuario', 'luis3'))
-    # print(tabla_persona.get_sql())
-    # tabla_persona.delete_sql('id',2)
-    # tabla_persona.update_sql(id=3, nombre='Lucas')
-    # print(tabla_persona.get_one_sql('id', 1))
