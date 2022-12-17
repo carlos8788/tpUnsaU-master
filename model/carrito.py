@@ -23,12 +23,18 @@ class Carrito:
         self.table.crear_tabla()
         self.table_producto = CrearDB("producto", None)
         self.table_usuario = CrearDB("usuario", None)
+        self.__productos_totales = 0
 
     def insertar_en_carrito(self, tabla_origen, tabla_destino, lista_productos: list, cantidad, *args):
         try:
             if not int(cantidad.get()) > lista_productos[2]:
+              
+                self.__productos_totales += int(cantidad.get())
+                if self.__productos_totales > 30:
+                    return messagebox.showwarning("Cantidad", "Cantidad máxima permitida de compra 30 unidades")
+                    
                 cantidad_nueva = self._restar_cantidad(lista_productos[2], int(cantidad.get()))
-                
+               
 
                 lista_productos.pop(2)
                 lista_productos.insert(0, cantidad.get())

@@ -78,7 +78,7 @@ class Bienvenida:
             font=("Inter", 20 * -1),
             
         )
-        self.entry_1.insert(0, 'luis')
+        self.entry_1.insert(0, 'carlos8788')
 
         self.entry_1.place(
             x=133.0,
@@ -114,7 +114,7 @@ class Bienvenida:
             height=25.0
         )
 
-        self.entry_7.insert(0, '132')
+        self.entry_7.insert(0, 'carlos8788')
 
         ####### BOTON REGISTRARSE #########
 
