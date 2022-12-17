@@ -58,9 +58,6 @@ class Producto:
         self.__categoria = new_categoria
         return self.__categoria
 
-    def _carga_tree(self, treeview, row):
-            treeview.insert('', 0, text=row[0], values=(
-                row[1], row[2], row[3], row[4], row[5]))
 
     def get_products(self, treeview):
 
@@ -68,6 +65,10 @@ class Producto:
         for row in db_rows:
             if row[2]> 0:
                 self._carga_tree(treeview, row)
+    
+    def _carga_tree(self, treeview, row):
+            treeview.insert('', 0, text=row[0], values=(
+                row[1], row[2], row[3], row[4], row[5]))
                 
     def get_products_admin(self, treeview):
 

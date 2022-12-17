@@ -28,15 +28,16 @@ class Carrito:
         try:
             if not int(cantidad.get()) > lista_productos[2]:
                 cantidad_nueva = self._restar_cantidad(lista_productos[2], int(cantidad.get()))
+                
 
                 lista_productos.pop(2)
                 lista_productos.insert(0, cantidad.get())
-
+                
                 subtotal = self._subtotal(float(lista_productos[2]), int(cantidad.get()))
                 lista_productos.append(subtotal)
 
                 self._carrito(lista_productos)
-
+                
                 tabla_destino.insert('', 0, text=lista_productos[0], values=(
                             lista_productos[1], lista_productos[2], lista_productos[3]))
                 
@@ -44,6 +45,7 @@ class Carrito:
                 lista_productos.clear()
 
                 datos = self._traer_producto(tabla_origen)
+                
                 self._actualizar_producto(tabla_origen, datos, cantidad_nueva)
 
             else:

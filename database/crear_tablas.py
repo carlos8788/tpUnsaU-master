@@ -8,6 +8,10 @@ class CrearDB:
         self.__columnas = columnas
 
     def _conectar_db(self):
+        """
+        Método privado de la clase, no recibe parámetros. 
+        Se utiliza para conectar a la base de datos
+        """
         try:
             nombre_db = 'supermarket.db'
             conexion = sqlite3.connect(nombre_db)
@@ -80,9 +84,7 @@ class CrearDB:
             else:
                 sql += f"{x}= '{y}', "
             contador += 1
-
         query = f"UPDATE {self.__nombre_tabla} SET {sql[:-2]} WHERE {ide};"
-
         cursor = conexion.cursor()
         cursor.execute(query)
         conexion.commit()

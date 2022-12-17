@@ -76,11 +76,12 @@ class Usuario:
         try:
             
             self.valor = self.table.sql_search('usuario', usuario.get())
+            print(contrasenia.get(), self.valor[1])
 
-            if self.valor[2] == 1:
+            if self.valor[2] == 1 and self.valor[1] == contrasenia.get() :
                 window.destroy()
                 return v_admin.VistaAdministrador(usuario.get())
-            if self.valor[1] == contrasenia.get():
+            if self.valor[1] == contrasenia.get() and self.valor[2] == 0:
                 
                 window.destroy()
                 ventana=v_usuario.VistaUsuario(usuario.get())
@@ -139,6 +140,7 @@ class Usuario:
 
         if existe_usuario == False:
             print("No existe el usuario")
+            print(psw_1.get())
             return messagebox.showwarning("Usuario", "No existe el usuario")
         if psw_1.get() != psw_2.get():
             return messagebox.showerror("Contraseñas", "No coinciden las contraseñas")
