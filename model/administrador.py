@@ -1,5 +1,6 @@
 from database.crear_tablas import CrearDB
 from model.producto import Producto
+# from model.usuario import Usuario
 
 from tkinter import messagebox
 class Administrador:
@@ -7,7 +8,7 @@ class Administrador:
     def __init__(self):
         self.tabla_producto = CrearDB('producto', None)
         self.producto = Producto(None, None, None, None, None)
-        
+        # self.usuario = Usuario(None, None, None, None, None)
         
         self.tabla_usuario = CrearDB("usuario", None)
 
@@ -19,8 +20,9 @@ class Administrador:
         b = str(args[1])
         b = b[1:-1]
         self.tabla_producto.insert_sql(a, b)
+        
         self.producto.record(treeview)
-        self.usuario.usuarios(treeview)
+        self.producto.get_products(treeview)
         messagebox.showinfo("Agregar producto", "El producto fue agregado correctamente")
         window.destroy()
         
