@@ -4,6 +4,7 @@ from model.administrador import Administrador
 class AgregarProducto:
     def __init__(self, window, treeview):
 
+
         self.admin = Administrador()
         self.window_2 = Toplevel()
 

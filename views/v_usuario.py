@@ -457,7 +457,12 @@ class VistaUsuario:
         if not self.current_item:
             return
         data = self.tabla.item(self.current_item)
+
+        print(data, "todo")
+        
         data = data["values"]
+        
+        print(data, "solo values")
 
         self.descripcion.config(text=data[4])
         self.precio.config(text=data[2])
